@@ -1,4 +1,5 @@
 import './App.css'
+import CreateItemForm from './components/CreateItemForm';
 import ItemList from './components/ItemList';
 
 function App() {
@@ -6,6 +7,7 @@ function App() {
     <>
       Hello World!
       <ItemList/>
+      <CreateItemForm/>
     </>
   )
 }

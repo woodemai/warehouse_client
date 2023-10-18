@@ -29,7 +29,9 @@ const Item:FC<ItemProps> = ({
         <div>{name}</div>
         <div>{description}</div>
         <div>{manufacturer}</div>
+        <div>{storageCondition}</div>
         <div>{weight}</div>
+        <div>{price}</div>
     </div> );
 }
  
