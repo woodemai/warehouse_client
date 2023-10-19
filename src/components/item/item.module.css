@@ -1,9 +1,0 @@
-.item {
-    display: flex;
-    flex-direction: column;
-    column-gap: 8px;
-    border: #333 1px solid;
-    border-radius: 8px;
-    padding: 4px;
-    margin-bottom: 8px;
-}

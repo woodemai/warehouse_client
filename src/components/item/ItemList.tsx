@@ -1,6 +1,6 @@
 import React, { useEffect , useState} from 'react';
 import axios from 'axios';
-import Item, { ItemProps } from './item/Item';
+import Item, { ItemProps } from './Item';
 
 
 const ItemList = () => {
@@ -12,11 +12,9 @@ const ItemList = () => {
         })
     },[]);
     return ( 
-    <>
-    <ul>
+    <div className='flex flex-col'>
         {items.map((item:ItemProps) => <Item key={item.id} {...item}/>)}
-    </ul>
-    </>
+    </div>
      );
 }
  

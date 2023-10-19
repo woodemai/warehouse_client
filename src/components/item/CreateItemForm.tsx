@@ -1,5 +1,6 @@
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
     DialogHeader,
@@ -41,16 +42,16 @@ const formSchema = z.object({
     }),
     description: z.string().min(6, {
         message: "Description must be at least 6 characters"
-    }).max(50, {
-        message: "Description must be less than 50 characters"
+    }).max(300, {
+        message: "Description must be less than 300 characters"
     }),
     manufacturer: z.string().min(2, {
         message: "Manufacturer must be at least 2 characters"
-    }).max(25, {
-        message: "Manufacturer must be less than 25 characters"
+    }).max(50, {
+        message: "Manufacturer must be less than 50 characters"
     }),
-    productionDate: z.date(),
-    expirationDate: z.date(),
+    productionDate: z.date().min(new Date("2020-01-01"), { message: "Too old" }),
+    expirationDate: z.date().min(new Date("2020-01-01"), { message: "Too old" }),
     storageCondition: z.string().min(8, {
         message: "Storage condition must be at least 8 characters"
     }).max(100, {
@@ -75,16 +76,18 @@ const CreateItemForm = () => {
             price: 0
         },
     })
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
-        axios.post("http://localhost/item", values)
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
+        axios.post("http://localhost:8080/item", { ...values })
+            .then(res => console.log(res))
+            .then(() => {
+                form.reset()
+            })
     }
-
     return (
         <Dialog>
-            <DialogTrigger>Open</DialogTrigger>
+            <DialogTrigger className="w-full"><Button className="w-full">New</Button></DialogTrigger>
             <DialogContent>
-                <ScrollArea className="h-96">
+                <ScrollArea className="h-[34rem]">
                     <DialogHeader>
                         <DialogTitle>Create new item</DialogTitle>
                         <DialogDescription>
@@ -92,7 +95,7 @@ const CreateItemForm = () => {
                         </DialogDescription>
                     </DialogHeader>
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mx-4">
                             <FormField
                                 control={form.control}
                                 name="name"
@@ -213,6 +216,22 @@ const CreateItemForm = () => {
                             />
                             <FormField
                                 control={form.control}
+                                name="storageCondition"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Storage condition</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Store in a warm, dry place" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Your item Storage condition
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
                                 name="weight"
                                 render={({ field }) => (
                                     <FormItem>
@@ -243,7 +262,10 @@ const CreateItemForm = () => {
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" >Create</Button>
+                            <DialogClose className="flex w-full justify-between ">
+                                <Button variant="secondary">Cancel</Button>
+                                <Button type="submit" >Create</Button>
+                            </DialogClose>
                         </form>
                     </Form>
                 </ScrollArea>
