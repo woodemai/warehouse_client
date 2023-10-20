@@ -1,9 +1,9 @@
-import { FC, useState } from 'react';
 import {
     Dialog,
     DialogClose,
     DialogContent,
     DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -34,24 +34,23 @@ import { Calendar as CalendarIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { FC, useState } from "react"
+import { CategoryProps } from "../category/Category"
+import { Check, ChevronsUpDown } from "lucide-react"
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+} from "@/components/ui/command"
 
-interface EditItemFormProps {
-    id: string
-    name: string,
-    description: string,
-    manufacturer: string,
-    productionDate: string,
-    expirationDate: string,
-    storageCondition: string
-    weight: number
-    price: number
-}
 
 const formSchema = z.object({
     name: z.string().min(2, {
         message: "Name must be at least 2 characters"
-    }).max(15, {
-        message: "Name must be less than 15 characters"
+    }).max(30, {
+        message: "Name must be less than 30 characters"
     }),
     description: z.string().min(6, {
         message: "Description must be at least 6 characters"
@@ -63,6 +62,7 @@ const formSchema = z.object({
     }).max(50, {
         message: "Manufacturer must be less than 50 characters"
     }),
+    category: z.string(),
     productionDate: z.date().min(new Date("2020-01-01"), { message: "Too old" }),
     expirationDate: z.date().min(new Date("2020-01-01"), { message: "Too old" }),
     storageCondition: z.string().min(8, {
@@ -73,49 +73,74 @@ const formSchema = z.object({
     weight: z.coerce.number(),
     price: z.coerce.number()
 })
-const EditItemForm: FC<EditItemFormProps> = ({
+interface ItemFormProps {
+    categories: CategoryProps[],
+    updating?: boolean,
+    id?: string
+    name?: string,
+    description?: string,
+    manufacturer?: string,
+    productionDate?: string,
+    expirationDate?: string,
+    storageCondition?: string
+    weight?: number
+    price?: number,
+    category?: CategoryProps
+}
+const ItemForm: FC<ItemFormProps> = ({
+    categories,
+    updating,
     id,
     name,
     description,
     manufacturer,
-    productionDate,
-    expirationDate,
     storageCondition,
     weight,
-    price
+    price,
+    category
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: name,
-            description: description,
-            manufacturer: manufacturer,
-            storageCondition: storageCondition,
+            name: name || "",
+            description: description || "",
+            manufacturer: manufacturer || "",
+            storageCondition: storageCondition || "",
             productionDate: new Date(),
             expirationDate: new Date(),
+            category: category && category.id,
             weight: weight,
             price: price
         },
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        axios.put(`http://localhost:8080/item/${id}`, { ...values })
-            .then(res => console.log(res))
-            .then(() => {
-                form.reset()
-                setIsOpen(false)
-            })
-    }
+        if (updating) {
+            axios.put(`http://localhost:8080/item/${id}`, { ...values })
+                .then(res => console.log(res))
+                .then(() => {
+                    form.reset()
+                    setIsOpen(false)
+                })
+        } else {
+            axios.post("http://localhost:8080/item", { ...values })
+                .then(res => console.log(res))
+                .then(() => {
+                    form.reset()
+                    setIsOpen(false)
+                })
+        }
 
+    }
     return (
         <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
-            <DialogTrigger><Button className='w-20'>Edit</Button></DialogTrigger>
+            <Button onClick={() => setIsOpen(true)} className={cn(!updating && "w-full")}>{updating ? "Edit" : "New"}</Button>
             <DialogContent>
                 <ScrollArea className="h-[34rem]">
                     <DialogHeader>
-                        <DialogTitle>Edit</DialogTitle>
+                        <DialogTitle>Create new item</DialogTitle>
                         <DialogDescription>
-                            Editing {name}
+                            Create your new item
                         </DialogDescription>
                     </DialogHeader>
                     <Form {...form}>
@@ -130,7 +155,7 @@ const EditItemForm: FC<EditItemFormProps> = ({
                                             <Input placeholder="Moose Horns" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            Item's name
+                                            New item's name
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -146,7 +171,7 @@ const EditItemForm: FC<EditItemFormProps> = ({
                                             <Input placeholder="These are the strongest best and coolest horns" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            {name}'s description
+                                            New item's description
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -163,6 +188,67 @@ const EditItemForm: FC<EditItemFormProps> = ({
                                         </FormControl>
                                         <FormDescription>
                                             Manufacturer's company name
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="category"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col">
+                                        <FormLabel>Category</FormLabel>
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <FormControl>
+                                                    <Button
+                                                        variant="outline"
+                                                        role="combobox"
+                                                        className={cn(
+                                                            "w-[200px] justify-between",
+                                                            !field.value && "text-muted-foreground"
+                                                        )}
+                                                    >
+                                                        {field.value
+                                                            ? categories.find(
+                                                                (category) => category.id === field.value
+                                                            )?.name
+                                                            : "Select category"}
+                                                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                    </Button>
+                                                </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-[200px] p-0">
+                                                <Command>
+                                                    <CommandInput placeholder="Search category..." />
+                                                    <CommandEmpty>No category found.</CommandEmpty>
+                                                    <CommandGroup>
+                                                        {categories.map((category) => (
+                                                            <CommandItem
+                                                                value={category.name}
+                                                                key={category.id}
+                                                                onSelect={() => {
+                                                                    form.setValue("category", category.id)
+                                                                }}
+                                                            >
+                                                                <Check
+                                                                    className={cn(
+                                                                        "mr-2 h-4 w-4",
+                                                                        category.id === field.value
+                                                                            ? "opacity-100"
+                                                                            : "opacity-0"
+                                                                    )}
+                                                                />
+                                                                {category.name}
+                                                            </CommandItem>
+                                                        ))}
+                                                    </CommandGroup>
+                                                </Command>
+                                            </PopoverContent>
+                                        </Popover>
+                                        <FormDescription>
+                                            This is the category of the item.
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -197,7 +283,7 @@ const EditItemForm: FC<EditItemFormProps> = ({
                                             </PopoverContent>
                                         </Popover>
                                         <FormDescription>
-                                            {name}'s production date
+                                            Item's production date
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -232,7 +318,7 @@ const EditItemForm: FC<EditItemFormProps> = ({
                                             </PopoverContent>
                                         </Popover>
                                         <FormDescription>
-                                            {name}'s expiration date
+                                            Item's expiration date
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -248,7 +334,7 @@ const EditItemForm: FC<EditItemFormProps> = ({
                                             <Input placeholder="Store in a warm, dry place" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            {name}'s storage condition
+                                            Your item Storage condition
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -264,7 +350,7 @@ const EditItemForm: FC<EditItemFormProps> = ({
                                             <Input placeholder="65"  {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            {name}'s weight
+                                            New item's weight
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -280,24 +366,23 @@ const EditItemForm: FC<EditItemFormProps> = ({
                                             <Input placeholder="73" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            {name}'s price
+                                            New item's price
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
-                            <div className="flex w-full justify-between ">
-                                <DialogClose >
-                                    <Button variant="secondary">Cancel</Button>
-                                </DialogClose>
-                                <Button type="submit" >Update</Button>
+                            <div >
+                                <Button type="button" variant="ghost">Cancel</Button>
+                                <Button type="submit" >{updating ? "Save" : "Create"}</Button>
                             </div>
                         </form>
                     </Form>
                 </ScrollArea>
             </DialogContent>
         </Dialog>
+
     );
 }
 
-export default EditItemForm;
+export default ItemForm;

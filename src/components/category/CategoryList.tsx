@@ -1,14 +1,13 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+
+import { FC } from "react";
 import Category from "./Category";
 import { CategoryProps } from "./Category";
+interface CategoryListProps {
+    categories: CategoryProps[]
+}
 
-const CategoryList = () => {
-    const [categories, setCategories] = useState([]);
-    useEffect(() => {
-        axios.get("http://localhost:8080/categories")
-            .then((res) => setCategories(res.data))
-    }, []);
+const CategoryList: FC<CategoryListProps> = ({ categories }) => {
+
     return (
         <div className='flex flex-col'>
             {categories.map((category: CategoryProps) => <Category key={category.id} {...category} />)}

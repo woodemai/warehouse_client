@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import EditItemForm from './EditeItemForm';
 import DeleteItemDialog from './DeleteItemDialog';
 import { Separator } from "@/components/ui/separator"
 
@@ -11,6 +10,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import ItemForm from './ItemForm';
+import { CategoryProps } from '../category/Category';
 
 export interface ItemProps {
     id: string
@@ -21,7 +22,9 @@ export interface ItemProps {
     expirationDate: string
     storageCondition: string
     weight: number
-    price: number
+    price: number,
+    categories: CategoryProps[]
+    category: CategoryProps
 }
 
 const Item: FC<ItemProps> = ({
@@ -33,7 +36,9 @@ const Item: FC<ItemProps> = ({
     expirationDate,
     storageCondition,
     weight,
-    price
+    price,
+    categories,
+    category
 }) => {
 
     return (
@@ -61,14 +66,19 @@ const Item: FC<ItemProps> = ({
                     </div>
                 </div>
             </DialogTrigger>
-            <DialogContent className='flex flex-col gap-y-8'>
+            <DialogContent className='flex flex-col gap-y-4'>
                 <DialogHeader>
                     <DialogTitle>{name}</DialogTitle>
-                    <DialogDescription>{manufacturer}</DialogDescription>
+                    <DialogDescription>{category.name}</DialogDescription>
                 </DialogHeader>
                 <div>
                     <div>Description</div>
                     <div className='font-light'>{description}</div>
+                </div>
+                <Separator />
+                <div>
+                    <div>Manufacturer</div>
+                    <div className='font-light'>{manufacturer}</div>
                 </div>
                 <Separator />
                 <div>
@@ -90,23 +100,23 @@ const Item: FC<ItemProps> = ({
                         <div className='font-light'>{productionDate}</div>
                     </div>
                     <div className='flex flex-col justify-center items-center'>
-                        <div>Expirationt Date</div>
+                        <div>Expiration Date</div>
                         <div className='font-light'>{expirationDate}</div>
                     </div>
                 </div>
                 <div className='flex flex-row justify-between'>
                     <DeleteItemDialog name={name} id={id} />
-                    <EditItemForm
-                        id={id}
-                        name={name}
-                        description={description}
-                        manufacturer={manufacturer}
-                        productionDate={productionDate}
-                        expirationDate={expirationDate}
-                        storageCondition={storageCondition}
-                        weight={weight}
-                        price={price}
-                    />
+                    <ItemForm 
+                    categories={categories}
+                     updating 
+                     id={id}
+                     name={name}
+                     description={description}
+                     manufacturer={manufacturer}
+                     storageCondition={storageCondition}
+                     weight={weight}
+                     price={price}
+                     category={category}/>
                 </div>
             </DialogContent>
         </Dialog>

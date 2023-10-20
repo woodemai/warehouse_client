@@ -1,10 +1,21 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import CreateItemForm from "./CreateItemForm";
-import ItemList
- from "./ItemList";
+import ItemList from "./ItemList";
 import CreateCategoryForm from "../category/CreateCategoryForm";
 import CategoryList from "../category/CategoryList";
-const MainTabs = () => {
+import { ItemProps } from "./Item";
+import { CategoryProps } from "../category/Category";
+import { FC } from "react";
+import ItemForm from "./ItemForm";
+
+interface MainTabsProps {
+    items: ItemProps[],
+    categories: CategoryProps[]
+}
+
+const MainTabs: FC<MainTabsProps> = ({
+    items,
+    categories
+}) => {
     return (
         <Tabs defaultValue="items" className="mx-auto">
             <TabsList className="flex flex-row">
@@ -14,14 +25,14 @@ const MainTabs = () => {
             </TabsList>
             <TabsContent value="items">
                 <div className='md:max-w-lg lg:max-w-xl mx-auto flex flex-col gap-4 p-4'>
-                    <CreateItemForm />
-                    <ItemList />
+                    <ItemForm categories={categories} />
+                    <ItemList items={items} categories={categories} />
                 </div>
             </TabsContent>
             <TabsContent value="categories">
-            <div className='md:max-w-lg lg:max-w-xl mx-auto flex flex-col gap-4 p-4'>
+                <div className='md:max-w-lg lg:max-w-xl mx-auto flex flex-col gap-4 p-4'>
                     <CreateCategoryForm />
-                    <CategoryList />
+                    <CategoryList categories={categories} />
                 </div>
             </TabsContent>
             <TabsContent value="suppliers">Suppliers</TabsContent>
