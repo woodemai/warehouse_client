@@ -1,20 +1,25 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import ItemList from "./ItemList";
-import CreateCategoryForm from "../category/CreateCategoryForm";
-import CategoryList from "../category/CategoryList";
-import { ItemProps } from "./Item";
-import { CategoryProps } from "../category/Category";
+import ItemList from "./item/ItemList";
+import CreateCategoryForm from "./category/CreateCategoryForm";
+import CategoryList from "./category/CategoryList";
+import { ItemProps } from "./item/Item";
+import { CategoryProps } from "./category/Category";
 import { FC } from "react";
-import ItemForm from "./ItemForm";
+import ItemForm from "./item/ItemForm";
+import SupplierList from "./supplier/SupplierList";
+import { SupplierProps } from "./supplier/Supplier";
+import SupplierForm from "./supplier/SupplierForm";
 
 interface MainTabsProps {
     items: ItemProps[],
-    categories: CategoryProps[]
+    categories: CategoryProps[],
+    suppliers: SupplierProps[]
 }
 
 const MainTabs: FC<MainTabsProps> = ({
     items,
-    categories
+    categories,
+    suppliers
 }) => {
     return (
         <Tabs defaultValue="items" className="mx-auto">
@@ -35,7 +40,12 @@ const MainTabs: FC<MainTabsProps> = ({
                     <CategoryList categories={categories} />
                 </div>
             </TabsContent>
-            <TabsContent value="suppliers">Suppliers</TabsContent>
+            <TabsContent value="suppliers">
+                <div className='md:max-w-lg lg:max-w-xl mx-auto flex flex-col gap-4 p-4'>
+                    <SupplierForm/>
+                    <SupplierList suppliers={suppliers} />
+                </div>
+            </TabsContent>
         </Tabs>
 
     );

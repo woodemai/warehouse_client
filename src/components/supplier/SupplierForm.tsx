@@ -1,3 +1,4 @@
+import formSchema from "./SupplierFormSchema";
 import {
     Dialog,
     DialogClose,
@@ -24,44 +25,53 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { useState } from "react"
+import { FC, useState } from "react";
+import { cn } from "@/lib/utils";
 
-const formSchema = z.object({
-    name: z.string().min(2, {
-        message: "Name must be at least 2 characters"
-    }).max(30, {
-        message: "Name must be less than 30 characters"
-    }),
-    description: z.string().min(6, {
-        message: "Description must be at least 6 characters"
-    }).max(300, {
-        message: "Description must be less than 300 characters"
-    }),
-})
 
-const CreateCategoryForm = () => {
+interface SupplierFormProps {
+    updating?: boolean,
+    id?: string,
+    name?: string,
+    inn?: number
+}
+const SupplierForm: FC<SupplierFormProps> = ({
+    updating,
+    id,
+    name,
+    inn
+}) => {
     const [isOpen, setIsOpen] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            description: "",
+            name: name,
+            inn: inn
         },
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        axios.post("http://localhost:8080/categories", { ...values })
+        if (updating) {
+            axios.put(`http://localhost:8080/suppliers/${id}`, { ...values })
             .then(() => {
                 form.reset()
                 setIsOpen(false)
             })
+        } else {
+            axios.post("http://localhost:8080/suppliers", { ...values })
+                .then(() => {
+                    form.reset()
+                    setIsOpen(false)
+                })
+        }
+
     }
     return (
         <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
-            <Button onClick={() => setIsOpen(true)} className="w-full">New</Button>
+            <Button onClick={() => setIsOpen(true)} className={cn(!updating && "w-full")}>{updating ? "Edit" : "New"}</Button>
             <DialogContent>
                 <ScrollArea className="h-auto">
                     <DialogHeader>
-                        <DialogTitle>Create category</DialogTitle>
+                        <DialogTitle>Create supplier</DialogTitle>
                         <DialogDescription>
                             Enter the characteristics below
                         </DialogDescription>
@@ -78,7 +88,7 @@ const CreateCategoryForm = () => {
                                             <Input placeholder="Moose Horns" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            New categories's name
+                                            Supplier's name
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -86,15 +96,15 @@ const CreateCategoryForm = () => {
                             />
                             <FormField
                                 control={form.control}
-                                name="description"
+                                name="inn"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Description</FormLabel>
+                                        <FormLabel>INN</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="These are the strongest best and coolest horns" {...field} />
+                                            <Input placeholder="12 digits number" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            New categories's description
+                                            Supplier's INN
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -102,15 +112,14 @@ const CreateCategoryForm = () => {
                             />
                             <DialogFooter >
                                 <DialogClose>Cancel</DialogClose>
-                                <Button type="submit" >Create</Button>
+                                <Button type="submit" >{updating ? "Save" : "Create"}</Button>
                             </DialogFooter>
                         </form>
                     </Form>
                 </ScrollArea>
             </DialogContent>
         </Dialog>
-
     );
 }
 
-export default CreateCategoryForm;
+export default SupplierForm;

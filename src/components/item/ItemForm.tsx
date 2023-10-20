@@ -103,33 +103,23 @@ const ItemForm: FC<ItemFormProps> = ({
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: name || "",
-            description: description || "",
-            manufacturer: manufacturer || "",
-            storageCondition: storageCondition || "",
+            name: name ?? "",
+            description: description ?? "",
+            manufacturer: manufacturer ?? "",
+            storageCondition: storageCondition ?? "",
             productionDate: new Date(),
             expirationDate: new Date(),
-            category: category && category.id,
+            category: category?.id,
             weight: weight,
             price: price
         },
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        if (updating) {
-            axios.put(`http://localhost:8080/item/${id}`, { ...values })
-                .then(res => console.log(res))
-                .then(() => {
-                    form.reset()
-                    setIsOpen(false)
-                })
-        } else {
-            axios.post("http://localhost:8080/item", { ...values })
-                .then(res => console.log(res))
-                .then(() => {
-                    form.reset()
-                    setIsOpen(false)
-                })
-        }
+        updating
+            ? axios.put(`http://localhost:8080/item/${id}`, { ...values })
+            : axios.post("http://localhost:8080/item", { ...values })
+        form.reset()
+        setIsOpen(false)
 
     }
     return (

@@ -7,34 +7,37 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import DeleteSupplierDialog from "./DeleteSupplierDialog";
+import SupplierForm from "./SupplierForm";
 
-export interface CategoryProps {
+export interface SupplierProps {
     id: string,
     name: string,
-    description: string
+    inn: number
 }
 
-const Category: FC<CategoryProps> = ({
+const Supplier: FC<SupplierProps> = ({
     id,
     name,
-    description
+    inn
 }) => {
     return (
         <Dialog>
-            <DialogTrigger className='flex flex-col hover:scale-105 cursor-pointer transition-all durantion-100 md:max-w-lg lg:max-w-xl justify-between p-4 border-gray-300 text-gray-700 border rounded-md mb-4 shadow-mdt'>
+            <DialogTrigger className='text-left hover:scale-105 cursor-pointer transition-all durantion-100 md:max-w-lg lg:max-w-xl flex flex-row justify-between p-4 border-gray-300 text-gray-700 border rounded-md mb-4 shadow-md'>
                 <h2 className="font-semiblod text-xl tracking-tight">{name}</h2>
-                <p className='font-light'>{description}</p>
             </DialogTrigger>
             <DialogContent className='flex flex-col gap-y-8'>
                 <DialogHeader>
                     <DialogTitle>{name}</DialogTitle>
-                    <DialogDescription>{description}</DialogDescription>
+                    <DialogDescription>INN - {inn}</DialogDescription>
                 </DialogHeader>
                 <div className='flex flex-row justify-between'>
+                    <DeleteSupplierDialog id={id} name={name} />
+                    <SupplierForm updating id={id} name={name} inn={inn} />
                 </div>
             </DialogContent>
         </Dialog>
     );
 }
 
-export default Category;
+export default Supplier;
