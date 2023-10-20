@@ -153,7 +153,7 @@ const ItemForm: FC<ItemFormProps> = ({
                                                         variant="outline"
                                                         role="combobox"
                                                         className={cn(
-                                                            "w-[200px] justify-between",
+                                                            "w-auto justify-between",
                                                             !field.value && "text-muted-foreground"
                                                         )}
                                                     >
@@ -214,7 +214,7 @@ const ItemForm: FC<ItemFormProps> = ({
                                                         variant="outline"
                                                         role="combobox"
                                                         className={cn(
-                                                            "w-[200px] justify-between",
+                                                            "w-auto justify-between",
                                                             !field.value && "text-muted-foreground"
                                                         )}
                                                     >

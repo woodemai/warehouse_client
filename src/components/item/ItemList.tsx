@@ -14,6 +14,13 @@ const ItemList:FC<ItemListProps> = ({
     categories,
     suppliers
 }) => {
+    if(!items.length) {
+        return (
+            <div className='transition-all durantion-600 flex justify-center items-center p-8 font-semibold tracking-tight text-2xl bg-gray-100 rounded-lg text-gray-700'>
+                No item found!
+            </div>
+        )
+    }
     return ( 
     <div className='flex flex-col'>
         {items.map((item:ItemProps) => <Item 

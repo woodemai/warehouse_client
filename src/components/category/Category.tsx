@@ -21,7 +21,7 @@ const Category: FC<CategoryProps> = ({
 }) => {
     return (
         <Dialog>
-            <DialogTrigger className='flex flex-col hover:scale-105 cursor-pointer transition-all durantion-100 md:max-w-lg lg:max-w-xl justify-between p-4 border-gray-300 text-gray-700 border rounded-md mb-4 shadow-mdt'>
+            <DialogTrigger className='flex flex-col hover:scale-105 cursor-pointer transition-all durantion-100 md:max-w-lg lg:max-w-xl justify-between p-4 border-gray-300 text-gray-700 border rounded-md mb-4 shadow-md'>
                 <h2 className="font-semiblod text-xl tracking-tight">{name}</h2>
                 <p className='font-light'>{description}</p>
             </DialogTrigger>

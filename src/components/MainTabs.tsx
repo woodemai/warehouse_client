@@ -4,11 +4,12 @@ import CreateCategoryForm from "./category/CreateCategoryForm";
 import CategoryList from "./category/CategoryList";
 import { ItemProps } from "./item/Item";
 import { CategoryProps } from "./category/Category";
-import { FC } from "react";
+import { FC, useState } from "react";
 import ItemForm from "./item/ItemForm";
 import SupplierList from "./supplier/SupplierList";
 import { SupplierProps } from "./supplier/Supplier";
 import SupplierForm from "./supplier/SupplierForm";
+import ItemsFilter from "./item/ItemsFilter";
 
 interface MainTabsProps {
     items: ItemProps[],
@@ -21,6 +22,7 @@ const MainTabs: FC<MainTabsProps> = ({
     categories,
     suppliers
 }) => {
+    const [filteredItems, setFilteredItems] = useState(items);
     return (
         <Tabs defaultValue="items" className="mx-auto">
             <TabsList className="flex flex-row">
@@ -31,7 +33,8 @@ const MainTabs: FC<MainTabsProps> = ({
             <TabsContent value="items">
                 <div className='md:max-w-lg lg:max-w-xl mx-auto flex flex-col gap-4 p-4'>
                     <ItemForm categories={categories} suppliers={suppliers}/>
-                    <ItemList items={items} categories={categories} suppliers={suppliers}/>
+                    <ItemsFilter items={items} setItems={setFilteredItems} />
+                    <ItemList items={filteredItems} categories={categories} suppliers={suppliers}/>
                 </div>
             </TabsContent>
             <TabsContent value="categories">
