@@ -3,6 +3,7 @@ import {
     DialogClose,
     DialogContent,
     DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -33,6 +34,7 @@ import { Calendar as CalendarIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useState } from "react"
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -62,7 +64,7 @@ const formSchema = z.object({
 })
 
 const CreateItemForm = () => {
-
+    const[isOpen, setIsOpen] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -72,8 +74,6 @@ const CreateItemForm = () => {
             storageCondition: "",
             productionDate: new Date(),
             expirationDate: new Date(),
-            weight: 0,
-            price: 0
         },
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
@@ -81,11 +81,12 @@ const CreateItemForm = () => {
             .then(res => console.log(res))
             .then(() => {
                 form.reset()
+                setIsOpen(false)
             })
     }
     return (
-        <Dialog>
-            <DialogTrigger className="w-full"><Button className="w-full">New</Button></DialogTrigger>
+        <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
+            <Button onClick={() => setIsOpen(true)} className="w-full">New</Button>
             <DialogContent>
                 <ScrollArea className="h-[34rem]">
                     <DialogHeader>
@@ -262,10 +263,10 @@ const CreateItemForm = () => {
                                     </FormItem>
                                 )}
                             />
-                            <DialogClose className="flex w-full justify-between ">
-                                <Button variant="secondary">Cancel</Button>
+                            <DialogFooter >
+                                <DialogClose>Cancel</DialogClose>
                                 <Button type="submit" >Create</Button>
-                            </DialogClose>
+                            </DialogFooter>
                         </form>
                     </Form>
                 </ScrollArea>

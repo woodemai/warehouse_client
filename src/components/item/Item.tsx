@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import EditItemForm from './EditeItemForm';
 import DeleteItemDialog from './DeleteItemDialog';
 import { Separator } from "@/components/ui/separator"
@@ -23,9 +23,6 @@ export interface ItemProps {
     weight: number
     price: number
 }
-const getDate = (date: Date) => {
-    return date.toISOString().slice(0,10).replace(/-/g,"")
-}
 
 const Item: FC<ItemProps> = ({
     id,
@@ -38,34 +35,31 @@ const Item: FC<ItemProps> = ({
     weight,
     price
 }) => {
- 
+
     return (
         <Dialog>
-            <DialogTrigger><div className='hover:scale-105 cursor-pointer transition-all durantion-100 md:max-w-lg lg:max-w-xl flex flex-row justify-between p-4 border-gray-300 text-gray-700 border rounded-md mb-4 shadow-md'>
-                <div className='leading-6'>
-                    <div className='mb-4'>
-                        <div className='flex flex-row gap-4 items-end'>
-                            <div className='font-semibold text-xl tracking-tight'>
-                                <h2>{name}</h2>
+            <DialogTrigger>
+                <div className='hover:scale-105 cursor-pointer transition-all durantion-100 md:max-w-lg lg:max-w-xl flex flex-row justify-between p-4 border-gray-300 text-gray-700 border rounded-md mb-4 shadow-md'>
+                    <div className='leading-6'>
+                        <div className='mb-4'>
+                            <div className='flex flex-row gap-4 items-end'>
+                                <div className='font-semibold text-xl tracking-tight'>
+                                    <h2>{name}</h2>
+                                </div>
+                                <div className='font-bold text-xl tracking-tight text-green-600'>
+                                    {price}₽
+                                </div>
                             </div>
-                            <div className='font-bold text-xl tracking-tight text-green-600'>
-                                {price}₽
+                            <div className='font-light text-left'>
+                                <p>{manufacturer}</p>
                             </div>
                         </div>
-                        <div className='font-light text-left'>
-                            <p>{manufacturer}</p>
+                        <div>
+                            <h3 className='text-left'>Description</h3>
+                            <p className='text-left tracking-wide font-light text-sm'>{description}</p>
                         </div>
                     </div>
-                    <div>
-                        <h3 className='text-left'>Description</h3>
-                        <p className='text-left tracking-wide font-light text-sm'>{description}</p>
-                    </div>
                 </div>
-
-                <div className='flex flex-col gap-y-4'>
-
-                </div>
-            </div>
             </DialogTrigger>
             <DialogContent className='flex flex-col gap-y-8'>
                 <DialogHeader>

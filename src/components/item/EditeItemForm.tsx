@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import {
     Dialog,
     DialogClose,
@@ -84,7 +84,7 @@ const EditItemForm: FC<EditItemFormProps> = ({
     weight,
     price
 }) => {
-
+    const [isOpen, setIsOpen] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -103,11 +103,12 @@ const EditItemForm: FC<EditItemFormProps> = ({
             .then(res => console.log(res))
             .then(() => {
                 form.reset()
+                setIsOpen(false)
             })
     }
 
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
             <DialogTrigger><Button className='w-20'>Edit</Button></DialogTrigger>
             <DialogContent>
                 <ScrollArea className="h-[34rem]">
@@ -285,10 +286,12 @@ const EditItemForm: FC<EditItemFormProps> = ({
                                     </FormItem>
                                 )}
                             />
-                            <DialogClose className="flex w-full justify-between ">
-                                <Button variant="secondary">Cancel</Button>
+                            <div className="flex w-full justify-between ">
+                                <DialogClose >
+                                    <Button variant="secondary">Cancel</Button>
+                                </DialogClose>
                                 <Button type="submit" >Update</Button>
-                            </DialogClose>
+                            </div>
                         </form>
                     </Form>
                 </ScrollArea>
