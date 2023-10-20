@@ -7,22 +7,22 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "../ui/button";
 import axios from "axios";
-import { FC } from "react";
+import { FC, useState } from "react";
 interface DeleteItemDialogProps {
     id: string
     name: string
 }
 const DeleteItemDialog:FC<DeleteItemDialogProps> = ({id,name}) => {
+    const [isOpen, setIsOpen] = useState(false);
     const deleteItem = () => {
         axios.delete(`http://localhost:8080/item/${id}`)
     }
     return (
-        <AlertDialog>
-            <AlertDialogTrigger><Button variant="destructive">Delete</Button></AlertDialogTrigger>
+        <AlertDialog open={isOpen} onOpenChange={() => setIsOpen(!open)}>
+            <Button onClick={() => setIsOpen(true)} variant="destructive">Delete</Button>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you sure you want to delete {name}?</AlertDialogTitle>

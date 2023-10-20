@@ -12,33 +12,36 @@ import {
 } from "@/components/ui/dialog"
 import ItemForm from './ItemForm';
 import { CategoryProps } from '../category/Category';
+import { SupplierProps } from '../supplier/Supplier';
 
 export interface ItemProps {
     id: string
     name: string
     description: string
-    manufacturer: string
     productionDate: string
     expirationDate: string
     storageCondition: string
     weight: number
     price: number,
-    categories: CategoryProps[]
+    supplier: SupplierProps
     category: CategoryProps
+    categories: CategoryProps[]
+    suppliers: SupplierProps[]
 }
 
 const Item: FC<ItemProps> = ({
     id,
     name,
     description,
-    manufacturer,
+    supplier,
+    category,
     productionDate,
     expirationDate,
     storageCondition,
     weight,
     price,
     categories,
-    category
+    suppliers
 }) => {
 
     return (
@@ -56,7 +59,7 @@ const Item: FC<ItemProps> = ({
                                 </div>
                             </div>
                             <div className='font-light text-left'>
-                                <p>{manufacturer}</p>
+                                <p>{supplier.name}</p>
                             </div>
                         </div>
                         <div>
@@ -77,8 +80,8 @@ const Item: FC<ItemProps> = ({
                 </div>
                 <Separator />
                 <div>
-                    <div>Manufacturer</div>
-                    <div className='font-light'>{manufacturer}</div>
+                    <div>Supplier</div>
+                    <div className='font-light'>{supplier.name}</div>
                 </div>
                 <Separator />
                 <div>
@@ -106,17 +109,18 @@ const Item: FC<ItemProps> = ({
                 </div>
                 <div className='flex flex-row justify-between'>
                     <DeleteItemDialog name={name} id={id} />
-                    <ItemForm 
-                    categories={categories}
-                     updating 
-                     id={id}
-                     name={name}
-                     description={description}
-                     manufacturer={manufacturer}
-                     storageCondition={storageCondition}
-                     weight={weight}
-                     price={price}
-                     category={category}/>
+                    <ItemForm
+                        categories={categories}
+                        suppliers={suppliers}
+                        updating
+                        id={id}
+                        name={name}
+                        description={description}
+                        supplier={supplier}
+                        storageCondition={storageCondition}
+                        weight={weight}
+                        price={price}
+                        category={category} />
                 </div>
             </DialogContent>
         </Dialog>

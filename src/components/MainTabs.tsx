@@ -30,8 +30,8 @@ const MainTabs: FC<MainTabsProps> = ({
             </TabsList>
             <TabsContent value="items">
                 <div className='md:max-w-lg lg:max-w-xl mx-auto flex flex-col gap-4 p-4'>
-                    <ItemForm categories={categories} />
-                    <ItemList items={items} categories={categories} />
+                    <ItemForm categories={categories} suppliers={suppliers}/>
+                    <ItemList items={items} categories={categories} suppliers={suppliers}/>
                 </div>
             </TabsContent>
             <TabsContent value="categories">

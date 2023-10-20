@@ -1,12 +1,9 @@
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -30,13 +27,12 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
+import { Calendar as CalendarIcon, Check, ChevronsUpDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { FC, useState } from "react"
 import { CategoryProps } from "../category/Category"
-import { Check, ChevronsUpDown } from "lucide-react"
 import {
     Command,
     CommandEmpty,
@@ -44,56 +40,33 @@ import {
     CommandInput,
     CommandItem,
 } from "@/components/ui/command"
+import formSchema from "./ItemFormSchema";
+import { SupplierProps } from "../supplier/Supplier"
 
 
-const formSchema = z.object({
-    name: z.string().min(2, {
-        message: "Name must be at least 2 characters"
-    }).max(30, {
-        message: "Name must be less than 30 characters"
-    }),
-    description: z.string().min(6, {
-        message: "Description must be at least 6 characters"
-    }).max(300, {
-        message: "Description must be less than 300 characters"
-    }),
-    manufacturer: z.string().min(2, {
-        message: "Manufacturer must be at least 2 characters"
-    }).max(50, {
-        message: "Manufacturer must be less than 50 characters"
-    }),
-    category: z.string(),
-    productionDate: z.date().min(new Date("2020-01-01"), { message: "Too old" }),
-    expirationDate: z.date().min(new Date("2020-01-01"), { message: "Too old" }),
-    storageCondition: z.string().min(8, {
-        message: "Storage condition must be at least 8 characters"
-    }).max(100, {
-        message: "Storage condition must be less than 100 characters"
-    }),
-    weight: z.coerce.number(),
-    price: z.coerce.number()
-})
 interface ItemFormProps {
     categories: CategoryProps[],
+    suppliers: SupplierProps[],
     updating?: boolean,
     id?: string
     name?: string,
     description?: string,
-    manufacturer?: string,
     productionDate?: string,
     expirationDate?: string,
     storageCondition?: string
     weight?: number
     price?: number,
-    category?: CategoryProps
+    category?: CategoryProps,
+    supplier?: SupplierProps
 }
 const ItemForm: FC<ItemFormProps> = ({
     categories,
+    suppliers,
     updating,
     id,
     name,
     description,
-    manufacturer,
+    supplier,
     storageCondition,
     weight,
     price,
@@ -105,13 +78,13 @@ const ItemForm: FC<ItemFormProps> = ({
         defaultValues: {
             name: name ?? "",
             description: description ?? "",
-            manufacturer: manufacturer ?? "",
+            supplier: supplier?.id,
             storageCondition: storageCondition ?? "",
             productionDate: new Date(),
             expirationDate: new Date(),
             category: category?.id,
-            weight: weight,
-            price: price
+            weight: weight ?? 0,
+            price: price ?? 0
         },
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
@@ -169,15 +142,60 @@ const ItemForm: FC<ItemFormProps> = ({
                             />
                             <FormField
                                 control={form.control}
-                                name="manufacturer"
+                                name="supplier"
                                 render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Manufacturer</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Horns and Hooves LLC" {...field} />
-                                        </FormControl>
+                                    <FormItem className="flex flex-col">
+                                        <FormLabel>Supplier</FormLabel>
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <FormControl>
+                                                    <Button
+                                                        variant="outline"
+                                                        role="combobox"
+                                                        className={cn(
+                                                            "w-[200px] justify-between",
+                                                            !field.value && "text-muted-foreground"
+                                                        )}
+                                                    >
+                                                        {field.value
+                                                            ? suppliers.find(
+                                                                (supplier) => supplier.id === field.value
+                                                            )?.name
+                                                            : "Select supplier"}
+                                                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                    </Button>
+                                                </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-[200px] p-0">
+                                                <Command>
+                                                    <CommandInput placeholder="Search supplier..." />
+                                                    <CommandEmpty>No supplier found.</CommandEmpty>
+                                                    <CommandGroup>
+                                                        {suppliers.map((supplier) => (
+                                                            <CommandItem
+                                                                value={supplier.name}
+                                                                key={supplier.id}
+                                                                onSelect={() => {
+                                                                    form.setValue("supplier", supplier.id)
+                                                                }}
+                                                            >
+                                                                <Check
+                                                                    className={cn(
+                                                                        "mr-2 h-4 w-4",
+                                                                        supplier.id === field.value
+                                                                            ? "opacity-100"
+                                                                            : "opacity-0"
+                                                                    )}
+                                                                />
+                                                                {supplier.name}
+                                                            </CommandItem>
+                                                        ))}
+                                                    </CommandGroup>
+                                                </Command>
+                                            </PopoverContent>
+                                        </Popover>
                                         <FormDescription>
-                                            Manufacturer's company name
+                                            This is the category of the item.
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>

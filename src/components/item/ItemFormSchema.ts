@@ -1,0 +1,30 @@
+import * as z from "zod"
+
+const formSchema = z.object({
+    name: z.string().min(2, {
+        message: "Name must be at least 2 characters"
+    }).max(30, {
+        message: "Name must be less than 30 characters"
+    }),
+    description: z.string().min(6, {
+        message: "Description must be at least 6 characters"
+    }).max(300, {
+        message: "Description must be less than 300 characters"
+    }),
+    supplier: z.string().min(2, {
+        message: "Manufacturer must be at least 2 characters"
+    }).max(50, {
+        message: "Manufacturer must be less than 50 characters"
+    }),
+    category: z.string(),
+    productionDate: z.date().min(new Date("2020-01-01"), { message: "Too old" }),
+    expirationDate: z.date().min(new Date("2020-01-01"), { message: "Too old" }),
+    storageCondition: z.string().min(8, {
+        message: "Storage condition must be at least 8 characters"
+    }).max(100, {
+        message: "Storage condition must be less than 100 characters"
+    }),
+    weight: z.coerce.number(),
+    price: z.coerce.number()
+})
+export default formSchema;

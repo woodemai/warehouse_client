@@ -7,7 +7,6 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -45,24 +44,16 @@ const SupplierForm: FC<SupplierFormProps> = ({
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: name,
-            inn: inn
+            name: name ?? "",
+            inn: inn ?? 0
         },
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        if (updating) {
-            axios.put(`http://localhost:8080/suppliers/${id}`, { ...values })
-            .then(() => {
-                form.reset()
-                setIsOpen(false)
-            })
-        } else {
-            axios.post("http://localhost:8080/suppliers", { ...values })
-                .then(() => {
-                    form.reset()
-                    setIsOpen(false)
-                })
-        }
+        updating
+            ? axios.put(`http://localhost:8080/suppliers/${id}`, { ...values })
+            : axios.post("http://localhost:8080/suppliers", { ...values })
+        form.reset()
+        setIsOpen(false)
 
     }
     return (

@@ -1,15 +1,18 @@
 import { FC} from 'react';
 import Item, { ItemProps } from './Item';
 import { CategoryProps } from '../category/Category';
+import { SupplierProps } from '../supplier/Supplier';
 
 interface ItemListProps {
     items: ItemProps[],
-    categories: CategoryProps[]
+    categories: CategoryProps[],
+    suppliers: SupplierProps[],
 }
 
 const ItemList:FC<ItemListProps> = ({
     items,
-    categories
+    categories,
+    suppliers
 }) => {
     return ( 
     <div className='flex flex-col'>
@@ -19,13 +22,14 @@ const ItemList:FC<ItemListProps> = ({
         id={item.id}
         name={item.name}
         description={item.description}
-        manufacturer={item.manufacturer}
+        supplier={item.supplier}
         storageCondition={item.storageCondition}
         weight={item.weight}
         price={item.price}
         expirationDate={item.expirationDate}
         productionDate={item.productionDate}
-        category={item.category} />)}
+        category={item.category} 
+        suppliers={suppliers}/>)}
     </div>
      );
 }
