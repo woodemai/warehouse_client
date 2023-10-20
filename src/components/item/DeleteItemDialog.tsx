@@ -33,7 +33,7 @@ const DeleteItemDialog:FC<DeleteItemDialogProps> = ({id,name}) => {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction><Button onClick={deleteItem}>Yes, delete</Button></AlertDialogAction>
+                    <AlertDialogAction onClick={deleteItem}>Yes, delete</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

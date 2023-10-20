@@ -372,8 +372,8 @@ const ItemForm: FC<ItemFormProps> = ({
                                     </FormItem>
                                 )}
                             />
-                            <div >
-                                <Button type="button" variant="ghost">Cancel</Button>
+                            <div className="flex justify-between">
+                                <Button type="button" variant="secondary">Cancel</Button>
                                 <Button type="submit" >{updating ? "Save" : "Create"}</Button>
                             </div>
                         </form>

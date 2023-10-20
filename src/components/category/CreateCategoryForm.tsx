@@ -29,8 +29,8 @@ import { useState } from "react"
 const formSchema = z.object({
     name: z.string().min(2, {
         message: "Name must be at least 2 characters"
-    }).max(15, {
-        message: "Name must be less than 15 characters"
+    }).max(30, {
+        message: "Name must be less than 30 characters"
     }),
     description: z.string().min(6, {
         message: "Description must be at least 6 characters"
@@ -49,7 +49,7 @@ const CreateCategoryForm = () => {
         },
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        axios.post("http://localhost:8080/item", { ...values })
+        axios.post("http://localhost:8080/categories", { ...values })
             .then(res => console.log(res))
             .then(() => {
                 form.reset()
