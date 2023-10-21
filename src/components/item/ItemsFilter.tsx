@@ -19,7 +19,7 @@ const ItemsFilter: FC<ItemsFilterProps> = ({
             || item.supplier.name.toLowerCase().includes(value.toLowerCase())
         )])
     }, [value, setItems, items]);
-    return <Input placeholder="Search..." onChange={(e) => setValue(e.target.value)} />
+    return <Input name="search" placeholder="Search..." onChange={(e) => setValue(e.target.value)} />
 }
 
 export default ItemsFilter;

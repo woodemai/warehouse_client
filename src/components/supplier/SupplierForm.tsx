@@ -76,7 +76,7 @@ const SupplierForm: FC<SupplierFormProps> = ({
                                     <FormItem>
                                         <FormLabel>Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Moose Horns" {...field} />
+                                            <Input autoComplete="name" placeholder="Moose Horns" {...field} />
                                         </FormControl>
                                         <FormDescription>
                                             Supplier's name

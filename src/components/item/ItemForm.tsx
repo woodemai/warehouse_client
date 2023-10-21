@@ -115,7 +115,7 @@ const ItemForm: FC<ItemFormProps> = ({
                                     <FormItem>
                                         <FormLabel>Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Moose Horns" {...field} />
+                                            <Input autoComplete="name" placeholder="Moose Horns" {...field} />
                                         </FormControl>
                                         <FormDescription>
                                             New item's name
@@ -267,10 +267,11 @@ const ItemForm: FC<ItemFormProps> = ({
                                 name="productionDate"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Production date</FormLabel>
+                                        <FormLabel htmlFor={field.name}>Production date</FormLabel>
                                         <Popover>
                                             <PopoverTrigger asChild>
                                                 <Button
+                                                    id={field.name}
                                                     variant={"outline"}
                                                     className={cn(
                                                         "w-[280px] justify-start text-left font-normal",
@@ -302,10 +303,11 @@ const ItemForm: FC<ItemFormProps> = ({
                                 name="expirationDate"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Expiration date</FormLabel>
+                                        <FormLabel htmlFor={field.name}>Expiration date</FormLabel>
                                         <Popover>
                                             <PopoverTrigger asChild>
                                                 <Button
+                                                    id={field.name}
                                                     variant={"outline"}
                                                     className={cn(
                                                         "w-[280px] justify-start text-left font-normal",

@@ -75,7 +75,7 @@ const CreateCategoryForm = () => {
                                     <FormItem>
                                         <FormLabel>Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Moose Horns" {...field} />
+                                            <Input autoComplete="name" placeholder="Moose Horns" {...field} />
                                         </FormControl>
                                         <FormDescription>
                                             New categories's name
