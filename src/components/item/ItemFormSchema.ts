@@ -11,12 +11,12 @@ const formSchema = z.object({
     }).max(300, {
         message: "Description must be less than 300 characters"
     }),
-    supplier: z.string().min(2, {
+    supplierId: z.string().min(2, {
         message: "Manufacturer must be at least 2 characters"
     }).max(50, {
         message: "Manufacturer must be less than 50 characters"
     }),
-    category: z.string(),
+    categoryId: z.string(),
     productionDate: z.date().min(new Date("2020-01-01"), { message: "Too old" }),
     expirationDate: z.date().min(new Date("2020-01-01"), { message: "Too old" }),
     storageCondition: z.string().min(8, {

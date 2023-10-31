@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import DeleteItemDialog from './DeleteItemDialog';
 import { Separator } from "@/components/ui/separator"
 
@@ -11,39 +11,36 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import ItemForm from './ItemForm';
-import { CategoryProps } from '../category/Category';
-import { SupplierProps } from '../supplier/Supplier';
+import { ICategory } from '@/models/ICategory';
+import { ISupplier } from '@/models/ISupplier';
+import { IItem } from '@/models/IItem';
+import SupplierService from '@/services/SupplierService';
+import CategoryService from '@/services/CategoryService';
+import { FormState } from './formState';
 
 export interface ItemProps {
-    id: string
-    name: string
-    description: string
-    productionDate: string
-    expirationDate: string
-    storageCondition: string
-    weight: number
-    price: number,
-    supplier: SupplierProps
-    category: CategoryProps
-    categories: CategoryProps[]
-    suppliers: SupplierProps[]
+    item: IItem
+    categories: ICategory[]
+    suppliers: ISupplier[]
 }
 
 const Item: FC<ItemProps> = ({
-    id,
-    name,
-    description,
-    supplier,
-    category,
-    productionDate,
-    expirationDate,
-    storageCondition,
-    weight,
-    price,
+    item,
     categories,
     suppliers
 }) => {
-
+    const [supplier, setSupplier] = useState<ISupplier>({} as ISupplier)
+    const [category, setCategory] = useState<ICategory>({} as ICategory)
+    useEffect(() => {
+        if (item.supplierId) {
+            SupplierService.getSupplier(item.supplierId)
+                .then(res => setSupplier(res.data))
+        }
+        if (item.categoryId) {
+            CategoryService.getCategory(item.categoryId)
+                .then(res => setCategory(res.data))
+        }
+    }, [item.categoryId, item.supplierId]);
     return (
         <Dialog>
             <DialogTrigger>
@@ -52,10 +49,10 @@ const Item: FC<ItemProps> = ({
                         <div className='mb-4'>
                             <div className='flex flex-row gap-4 items-end'>
                                 <div className='font-semibold text-xl tracking-tight'>
-                                    <h2>{name}</h2>
+                                    <h2>{item.name}</h2>
                                 </div>
                                 <div className='font-bold text-xl tracking-tight text-green-600'>
-                                    {price}₽
+                                    {item.price}₽
                                 </div>
                             </div>
                             <div className='font-light text-left'>
@@ -64,19 +61,19 @@ const Item: FC<ItemProps> = ({
                         </div>
                         <div>
                             <h3 className='text-left'>Description</h3>
-                            <p className='text-left tracking-wide font-light text-sm'>{description}</p>
+                            <p className='text-left tracking-wide font-light text-sm'>{item.description}</p>
                         </div>
                     </div>
                 </div>
             </DialogTrigger>
             <DialogContent className='flex flex-col gap-y-4'>
                 <DialogHeader>
-                    <DialogTitle>{name}</DialogTitle>
+                    <DialogTitle>{item.name}</DialogTitle>
                     <DialogDescription>{category.name}</DialogDescription>
                 </DialogHeader>
                 <div>
                     <div>Description</div>
-                    <div className='font-light'>{description}</div>
+                    <div className='font-light'>{item.description}</div>
                 </div>
                 <Separator />
                 <div>
@@ -86,41 +83,36 @@ const Item: FC<ItemProps> = ({
                 <Separator />
                 <div>
                     <div>Storage condition</div>
-                    <div className='font-light'>{storageCondition}</div>
+                    <div className='font-light'>{item.storageCondition}</div>
                 </div>
                 <Separator />
                 <div className='flex flex-row gap-x-8'>
                     <div className='flex flex-col justify-center items-center'>
                         <div>Price</div>
-                        <div className='font-light'>{price}</div>
+                        <div className='font-light'>{item.price}</div>
                     </div>
                     <div className='flex flex-col justify-center items-center'>
                         <div>Weight</div>
-                        <div className='font-light'>{weight}</div>
+                        <div className='font-light'>{item.weight}</div>
                     </div>
                     <div className='flex flex-col justify-center items-center'>
                         <div>Production date</div>
-                        <div className='font-light'>{productionDate}</div>
+                        <div className='font-light'>{item.productionDate}</div>
                     </div>
                     <div className='flex flex-col justify-center items-center'>
                         <div>Expiration Date</div>
-                        <div className='font-light'>{expirationDate}</div>
+                        <div className='font-light'>{item.expirationDate}</div>
                     </div>
                 </div>
                 <div className='flex flex-row justify-between'>
-                    <DeleteItemDialog name={name} id={id} />
+                    <DeleteItemDialog name={item.name} id={item.id} />
                     <ItemForm
                         categories={categories}
                         suppliers={suppliers}
-                        updating
-                        id={id}
-                        name={name}
-                        description={description}
                         supplier={supplier}
-                        storageCondition={storageCondition}
-                        weight={weight}
-                        price={price}
-                        category={category} />
+                        category={category}
+                        item={item}
+                        formState={FormState.UPDATE} />
                 </div>
             </DialogContent>
         </Dialog>

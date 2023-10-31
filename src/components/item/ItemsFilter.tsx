@@ -1,9 +1,10 @@
 import { FC, useState, useEffect } from "react";
 import { Input } from "../ui/input";
 import { ItemProps } from "./Item";
+import { IItem } from "@/models/IItem";
 interface ItemsFilterProps {
-    items: ItemProps[]
-    setItems: (items: ItemProps[]) => void
+    items: IItem[]
+    setItems: (items: IItem[]) => void
 }
 
 const ItemsFilter: FC<ItemsFilterProps> = ({

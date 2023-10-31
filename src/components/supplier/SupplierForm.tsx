@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { FC, useState } from "react";
 import { cn } from "@/lib/utils";
+import SupplierService from "@/services/SupplierService";
 
 
 interface SupplierFormProps {
@@ -51,9 +52,11 @@ const SupplierForm: FC<SupplierFormProps> = ({
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         updating
             ? axios.put(`http://localhost:8080/suppliers/${id}`, { ...values })
-            : axios.post("http://localhost:8080/suppliers", { ...values })
-        form.reset()
-        setIsOpen(false)
+            : SupplierService.createSupplier(values.name, values.inn)
+                .then(() => {
+                    form.reset()
+                    setIsOpen(false)
+                })
 
     }
     return (

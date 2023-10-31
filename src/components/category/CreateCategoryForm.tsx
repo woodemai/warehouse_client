@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useState } from "react"
+import CategoryService from "@/services/CategoryService"
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -49,7 +50,7 @@ const CreateCategoryForm = () => {
         },
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        axios.post("http://localhost:8080/categories", { ...values })
+        CategoryService.createCategory(values.name, values.description)
             .then(() => {
                 form.reset()
                 setIsOpen(false)

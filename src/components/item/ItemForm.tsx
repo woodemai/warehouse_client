@@ -8,7 +8,6 @@ import {
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import axios from "axios"
 import {
     Form,
     FormControl,
@@ -32,7 +31,6 @@ import { Calendar as CalendarIcon, Check, ChevronsUpDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { FC, useState } from "react"
-import { CategoryProps } from "../category/Category"
 import {
     Command,
     CommandEmpty,
@@ -41,63 +39,60 @@ import {
     CommandItem,
 } from "@/components/ui/command"
 import formSchema from "./ItemFormSchema";
-import { SupplierProps } from "../supplier/Supplier"
+import { ICategory } from "@/models/ICategory"
+import { ISupplier } from "@/models/ISupplier"
+import ItemService from "@/services/ItemService"
+import { IItem } from "@/models/IItem"
+import { FormState } from "./formState"
 
 
 interface ItemFormProps {
-    categories: CategoryProps[],
-    suppliers: SupplierProps[],
-    updating?: boolean,
-    id?: string
-    name?: string,
-    description?: string,
-    productionDate?: string,
-    expirationDate?: string,
-    storageCondition?: string
-    weight?: number
-    price?: number,
-    category?: CategoryProps,
-    supplier?: SupplierProps
+    categories: ICategory[],
+    suppliers: ISupplier[],
+    item?: IItem,
+    category?: ICategory,
+    supplier?: ISupplier
+    formState: FormState
 }
 const ItemForm: FC<ItemFormProps> = ({
     categories,
     suppliers,
-    updating,
-    id,
-    name,
-    description,
-    supplier,
-    storageCondition,
-    weight,
-    price,
-    category
+    item,
+    formState
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: name ?? "",
-            description: description ?? "",
-            supplier: supplier?.id,
-            storageCondition: storageCondition ?? "",
+            name: item?.name ?? "",
+            description: item?.description ?? "",
+            supplierId: item?.supplierId,
+            storageCondition: item?.storageCondition ?? "",
             productionDate: new Date(),
             expirationDate: new Date(),
-            category: category?.id,
-            weight: weight ?? 0,
-            price: price ?? 0
+            categoryId: item?.categoryId,
+            weight: item?.weight ?? 0,
+            price: item?.price ?? 0
         },
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        updating
-            ? axios.put(`http://localhost:8080/item/${id}`, { ...values })
-            : axios.post("http://localhost:8080/item", { ...values })
-        form.reset()
-        setIsOpen(false)
-
+        if (formState === FormState.CREATE) {
+            ItemService.createItem({ ...values })
+                .then(() => {
+                    form.reset()
+                    setIsOpen(false)
+                })
+        } else {
+            ItemService.updateItem({ ...values })
+                .then(() => {
+                    form.reset()
+                    setIsOpen(false)
+                })
+        }
     }
     return (
         <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
-            <Button onClick={() => setIsOpen(true)} className={cn(!updating && "w-full")}>{updating ? "Edit" : "New"}</Button>
+            <Button onClick={() => setIsOpen(true)} className={cn(formState === FormState.CREATE && "w-full")}>{formState === FormState.UPDATE ? "Edit" : "New"}</Button>
             <DialogContent>
                 <ScrollArea className="h-[34rem]">
                     <DialogHeader>
@@ -142,7 +137,7 @@ const ItemForm: FC<ItemFormProps> = ({
                             />
                             <FormField
                                 control={form.control}
-                                name="supplier"
+                                name="supplierId"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
                                         <FormLabel>Supplier</FormLabel>
@@ -176,7 +171,7 @@ const ItemForm: FC<ItemFormProps> = ({
                                                                 value={supplier.name}
                                                                 key={supplier.id}
                                                                 onSelect={() => {
-                                                                    form.setValue("supplier", supplier.id)
+                                                                    form.setValue("supplierId", supplier.id)
                                                                 }}
                                                             >
                                                                 <Check
@@ -203,7 +198,7 @@ const ItemForm: FC<ItemFormProps> = ({
                             />
                             <FormField
                                 control={form.control}
-                                name="category"
+                                name="categoryId"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
                                         <FormLabel>Category</FormLabel>
@@ -237,7 +232,7 @@ const ItemForm: FC<ItemFormProps> = ({
                                                                 value={category.name}
                                                                 key={category.id}
                                                                 onSelect={() => {
-                                                                    form.setValue("category", category.id)
+                                                                    form.setValue("categoryId", category.id)
                                                                 }}
                                                             >
                                                                 <Check
@@ -384,7 +379,7 @@ const ItemForm: FC<ItemFormProps> = ({
                             />
                             <div className="flex justify-between">
                                 <Button type="button" variant="secondary">Cancel</Button>
-                                <Button type="submit" >{updating ? "Save" : "Create"}</Button>
+                                <Button type="submit" >{formState === FormState.UPDATE ? "Save" : "Create"}</Button>
                             </div>
                         </form>
                     </Form>

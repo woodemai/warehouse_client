@@ -4,6 +4,7 @@ export interface IItem {
     description:string,
     productionDate: string,
     expirationDate: string,
+    storageCondition: string,
     supplierId: string,
     categoryId: string,
     weight: number,

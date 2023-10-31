@@ -1,7 +1,8 @@
 import { FC } from "react";
-import Supplier, { SupplierProps } from "./Supplier";
+import Supplier from "./Supplier";
+import { ISupplier } from "@/models/ISupplier";
 interface SupplierListProps {
-    suppliers: SupplierProps[]
+    suppliers: ISupplier[]
 }
 
 const SupplierList:FC<SupplierListProps> = ({
@@ -9,7 +10,7 @@ const SupplierList:FC<SupplierListProps> = ({
 }) => {
     return ( 
         <div className='flex flex-col'>
-        {suppliers.map((supplier: SupplierProps) => <Supplier key={supplier.id} {...supplier} />)}
+        {suppliers.map(supplier => <Supplier key={supplier.id} supplier={supplier} />)}
     </div>
      );
 }
