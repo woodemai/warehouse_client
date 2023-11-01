@@ -9,31 +9,31 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Button } from "../ui/button";
-import axios from "axios";
 import { FC, useState } from "react";
+import SupplierService from "@/services/SupplierService";
+import { ISupplier } from "@/models/ISupplier";
 interface DeleteItemDialogProps {
-    id: string
-    name: string
+    supplier: ISupplier
 }
-const DeleteSupplierDialog: FC<DeleteItemDialogProps> = ({ id, name }) => {
+const DeleteSupplierDialog: FC<DeleteItemDialogProps> = ({
+    supplier
+}) => {
+    const { id, name } = supplier;
     const [open, setOpen] = useState(false);
-    const deleteSupplier = () => {
-        axios.delete(`http://localhost:8080/suppliers/${id}`)
-    }
     return (
         <AlertDialog open={open} onOpenChange={() => setOpen(!open)}>
-            <Button onClick={() => setOpen(true)} variant="destructive">Delete</Button>
+            <Button onClick={() => setOpen(true)} variant="destructive">Удалить</Button>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure you want to delete {name}?</AlertDialogTitle>
+                    <AlertDialogTitle>Вы точно хотите удалить {name}?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your item
-                        and remove its data from our servers.
+                        Это действие нельзя отменить. После удаления вся информация будет навсегда 
+                        удалена с нашего сервера.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={deleteSupplier}>Yes, delete</AlertDialogAction>
+                    <AlertDialogCancel>Отменить</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => SupplierService.deleteSupplier(id)}>Да, удалить</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

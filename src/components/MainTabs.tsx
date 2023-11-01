@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ItemList from "./item/ItemList";
-import CreateCategoryForm from "./category/CreateCategoryForm";
+import CategoryForm from "./category/CategoryForm";
 import CategoryList from "./category/CategoryList";
 import { FC, useState } from "react";
 import ItemForm from "./item/ItemForm";
@@ -10,7 +10,11 @@ import ItemsFilter from "./item/ItemsFilter";
 import { IItem } from "@/models/IItem";
 import { ICategory } from "@/models/ICategory";
 import { ISupplier } from "@/models/ISupplier";
-import { FormState } from "./item/formState";
+import { FormState } from "../models/formState";
+import List from "./ui/list";
+import Item from "./item/Item";
+import Category from "./category/Category";
+import Supplier from "./supplier/Supplier";
 
 interface MainTabsProps {
     items: IItem[],
@@ -25,29 +29,29 @@ const MainTabs: FC<MainTabsProps> = ({
 }) => {
     const [filteredItems, setFilteredItems] = useState(items);
     return (
-        <Tabs defaultValue="items" className="mx-auto">
-            <TabsList className="flex flex-row">
-                <TabsTrigger value="items">Items</TabsTrigger>
-                <TabsTrigger value="categories">Categories</TabsTrigger>
-                <TabsTrigger value="suppliers">Suppliers</TabsTrigger>
+        <Tabs defaultValue="items">
+            <TabsList className="mx-auto w-full bg-transperent">
+                <TabsTrigger value="items">Предметы</TabsTrigger>
+                <TabsTrigger value="categories">Категории</TabsTrigger>
+                <TabsTrigger value="suppliers">Поставщики</TabsTrigger>
             </TabsList>
             <TabsContent value="items">
                 <div className='md:max-w-lg lg:max-w-xl mx-auto flex flex-col gap-4 p-4'>
-                    <ItemForm categories={categories} suppliers={suppliers} formState={FormState.CREATE}/>
+                    <ItemForm categories={categories} suppliers={suppliers} formState={FormState.CREATE} />
                     <ItemsFilter items={items} setItems={setFilteredItems} />
-                    <ItemList items={filteredItems} categories={categories} suppliers={suppliers}/>
+                    <List items={filteredItems} renderItem={(item) => <Item key={item.id} item={item} />} />
                 </div>
             </TabsContent>
             <TabsContent value="categories">
                 <div className='md:max-w-lg lg:max-w-xl mx-auto flex flex-col gap-4 p-4'>
-                    <CreateCategoryForm />
-                    <CategoryList categories={categories} />
+                    <CategoryForm formState={FormState.CREATE} />
+                    <List items={categories} renderItem={(category) => <Category key={category.id} category={category} />} />
                 </div>
             </TabsContent>
             <TabsContent value="suppliers">
                 <div className='md:max-w-lg lg:max-w-xl mx-auto flex flex-col gap-4 p-4'>
-                    <SupplierForm/>
-                    <SupplierList suppliers={suppliers} />
+                    <SupplierForm formState={FormState.CREATE} />
+                    <List items={suppliers} renderItem={(supplier) => <Supplier key={supplier.id} supplier={supplier} />} />
                 </div>
             </TabsContent>
         </Tabs>

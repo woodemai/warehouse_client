@@ -6,12 +6,10 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import axios from "axios"
 import {
     Form,
     FormControl,
@@ -24,8 +22,12 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { useState } from "react"
+import { FC, useState } from "react"
 import CategoryService from "@/services/CategoryService"
+import { FormState } from "@/models/formState"
+import { ICategory } from "@/models/ICategory"
+import { cn } from "@/lib/utils"
+import { Textarea } from "../ui/textarea"
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -39,32 +41,55 @@ const formSchema = z.object({
         message: "Description must be less than 300 characters"
     }),
 })
+interface CategoryFormProps {
+    formState: FormState,
+    category?: ICategory
+}
 
-const CreateCategoryForm = () => {
+const CategoryForm: FC<CategoryFormProps> = ({
+    formState,
+    category
+}) => {
     const [isOpen, setIsOpen] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            description: "",
+            name: category?.name ?? "",
+            description: category?.description ?? "",
         },
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        CategoryService.createCategory(values.name, values.description)
-            .then(() => {
-                form.reset()
-                setIsOpen(false)
-            })
+        if (formState === FormState.UPDATE && category) {
+            const updatedCategory: ICategory = {
+                id: category?.id,
+                name: values.name,
+                description: values.description
+            }
+            CategoryService.updateCategory(updatedCategory)
+                .then(() => {
+                    form.reset()
+                    setIsOpen(false)
+                })
+        } else {
+            CategoryService.createCategory(values.name, values.description)
+                .then(() => {
+                    form.reset()
+                    setIsOpen(false)
+                })
+
+        }
     }
     return (
         <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
-            <Button onClick={() => setIsOpen(true)} className="w-full">New</Button>
+            <Button onClick={() => setIsOpen(true)} className={cn(formState === FormState.CREATE && "w-full")}>
+                {formState === FormState.CREATE ? "Создать" : "Изменить"}
+            </Button>
             <DialogContent>
                 <ScrollArea className="h-auto">
                     <DialogHeader>
-                        <DialogTitle>Create category</DialogTitle>
+                        <DialogTitle>Категория</DialogTitle>
                         <DialogDescription>
-                            Enter the characteristics below
+                            Введите характеристики ниже
                         </DialogDescription>
                     </DialogHeader>
                     <Form {...form}>
@@ -74,12 +99,12 @@ const CreateCategoryForm = () => {
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Name</FormLabel>
+                                        <FormLabel>Название</FormLabel>
                                         <FormControl>
-                                            <Input autoComplete="name" placeholder="Moose Horns" {...field} />
+                                            <Input autoComplete="name" placeholder="Рога" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            New categories's name
+                                            Название новой категории
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -90,20 +115,22 @@ const CreateCategoryForm = () => {
                                 name="description"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Description</FormLabel>
+                                        <FormLabel>Описание</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="These are the strongest best and coolest horns" {...field} />
+                                            <Textarea placeholder="Рога Лосяша" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            New categories's description
+                                            Описание новой категории
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
                             <DialogFooter >
-                                <DialogClose>Cancel</DialogClose>
-                                <Button type="submit" >Create</Button>
+                                <DialogClose>Отмена</DialogClose>
+                                <Button>
+                                    {formState === FormState.CREATE ? "Создать" : "Обновить"}
+                                </Button>
                             </DialogFooter>
                         </form>
                     </Form>
@@ -114,4 +141,4 @@ const CreateCategoryForm = () => {
     );
 }
 
-export default CreateCategoryForm;
+export default CategoryForm;

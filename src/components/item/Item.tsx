@@ -16,35 +16,37 @@ import { ISupplier } from '@/models/ISupplier';
 import { IItem } from '@/models/IItem';
 import SupplierService from '@/services/SupplierService';
 import CategoryService from '@/services/CategoryService';
-import { FormState } from './formState';
+import { FormState } from '../../models/formState';
 
 export interface ItemProps {
     item: IItem
-    categories: ICategory[]
-    suppliers: ISupplier[]
 }
 
 const Item: FC<ItemProps> = ({
-    item,
-    categories,
-    suppliers
+    item
 }) => {
     const [supplier, setSupplier] = useState<ISupplier>({} as ISupplier)
     const [category, setCategory] = useState<ICategory>({} as ICategory)
+    const [suppliers, setSuppliers] = useState<ISupplier[]>([]);
+    const [categories, setCategories] = useState<ICategory[]>([]);
     useEffect(() => {
-        if (item.supplierId) {
-            SupplierService.getSupplier(item.supplierId)
-                .then(res => setSupplier(res.data))
+        const category = categories.find(category => category.id === item.categoryId);
+        if (category !== undefined) {
+            setCategory(category)
         }
-        if (item.categoryId) {
-            CategoryService.getCategory(item.categoryId)
-                .then(res => setCategory(res.data))
+        const supplier = suppliers.find(supplier => supplier.id === item.supplierId);
+        if (supplier !== undefined) {
+            setSupplier(supplier)
         }
-    }, [item.categoryId, item.supplierId]);
+    }, [item.categoryId, item.supplierId, categories, suppliers]);
+    useEffect(() => {
+        SupplierService.getSuppliers().then(res => setSuppliers(res.data))
+        CategoryService.getCategorires().then(res => setCategories(res.data))
+    }, []);
     return (
         <Dialog>
             <DialogTrigger>
-                <div className='hover:scale-105 cursor-pointer transition-all durantion-100 md:max-w-lg lg:max-w-xl flex flex-row justify-between p-4 border-gray-300 text-gray-700 border rounded-md mb-4 shadow-md'>
+                <div className='bg-background hover:scale-105 cursor-pointer transition-all durantion-100 md:max-w-lg lg:max-w-xl flex flex-row justify-between p-4 border-gray-300 text-gray-700 border rounded-md shadow-md'>
                     <div className='leading-6'>
                         <div className='mb-4'>
                             <div className='flex flex-row gap-4 items-end'>
@@ -52,7 +54,7 @@ const Item: FC<ItemProps> = ({
                                     <h2>{item.name}</h2>
                                 </div>
                                 <div className='font-bold text-xl tracking-tight text-green-600'>
-                                    {item.price}₽
+                                    {item.price} ₽
                                 </div>
                             </div>
                             <div className='font-light text-left'>
@@ -60,7 +62,7 @@ const Item: FC<ItemProps> = ({
                             </div>
                         </div>
                         <div>
-                            <h3 className='text-left'>Description</h3>
+                            <h3 className='text-left'>Описание</h3>
                             <p className='text-left tracking-wide font-light text-sm'>{item.description}</p>
                         </div>
                     </div>
@@ -72,45 +74,43 @@ const Item: FC<ItemProps> = ({
                     <DialogDescription>{category.name}</DialogDescription>
                 </DialogHeader>
                 <div>
-                    <div>Description</div>
+                    <div>Описание</div>
                     <div className='font-light'>{item.description}</div>
                 </div>
                 <Separator />
                 <div>
-                    <div>Supplier</div>
+                    <div>Поставщик</div>
                     <div className='font-light'>{supplier.name}</div>
                 </div>
                 <Separator />
                 <div>
-                    <div>Storage condition</div>
+                    <div>Условия хранения</div>
                     <div className='font-light'>{item.storageCondition}</div>
                 </div>
                 <Separator />
                 <div className='flex flex-row gap-x-8'>
                     <div className='flex flex-col justify-center items-center'>
-                        <div>Price</div>
+                        <div>Цена</div>
                         <div className='font-light'>{item.price}</div>
                     </div>
                     <div className='flex flex-col justify-center items-center'>
-                        <div>Weight</div>
+                        <div>Вес</div>
                         <div className='font-light'>{item.weight}</div>
                     </div>
                     <div className='flex flex-col justify-center items-center'>
-                        <div>Production date</div>
-                        <div className='font-light'>{item.productionDate}</div>
+                        <div>Дата производства</div>
+                        <div className='font-light'>{String(item.productionDate)}</div>
                     </div>
                     <div className='flex flex-col justify-center items-center'>
-                        <div>Expiration Date</div>
-                        <div className='font-light'>{item.expirationDate}</div>
+                        <div>Годен до</div>
+                        <div className='font-light'>{String(item.expirationDate)}</div>
                     </div>
                 </div>
                 <div className='flex flex-row justify-between'>
-                    <DeleteItemDialog name={item.name} id={item.id} />
+                    <DeleteItemDialog item={item} />
                     <ItemForm
                         categories={categories}
                         suppliers={suppliers}
-                        supplier={supplier}
-                        category={category}
                         item={item}
                         formState={FormState.UPDATE} />
                 </div>

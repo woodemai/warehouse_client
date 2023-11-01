@@ -37,7 +37,7 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
                 <span>{role}</span>
             </div>
             <AlertDialog open={open} onOpenChange={() => setOpen(!open)}>
-                <Button onClick={() => setOpen(true)} variant="outline" className="flex flex-row gap-x-2">Выйти</Button>
+                <Button onClick={() => setOpen(true)} className="flex flex-row gap-x-2">Выйти</Button>
                 <AlertDialogContent className="bg-white flex flex-col gap-y-8">
                     <AlertDialogHeader>
                         <AlertDialogTitle>Вы уверены что хотите выйти?</AlertDialogTitle>

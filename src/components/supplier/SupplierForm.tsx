@@ -11,7 +11,6 @@ import {
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import axios from "axios"
 import {
     Form,
     FormControl,
@@ -27,47 +26,48 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { FC, useState } from "react";
 import { cn } from "@/lib/utils";
 import SupplierService from "@/services/SupplierService";
+import { FormState } from "@/models/formState";
+import { ISupplier } from "@/models/ISupplier";
 
 
 interface SupplierFormProps {
-    updating?: boolean,
-    id?: string,
-    name?: string,
-    inn?: number
+    formState: FormState,
+    supplier?: ISupplier
 }
 const SupplierForm: FC<SupplierFormProps> = ({
-    updating,
-    id,
-    name,
-    inn
+    formState,
+    supplier
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: name ?? "",
-            inn: inn ?? 0
+            name: supplier?.name ?? "",
+            inn: supplier?.inn ?? 0
         },
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        updating
-            ? axios.put(`http://localhost:8080/suppliers/${id}`, { ...values })
-            : SupplierService.createSupplier(values.name, values.inn)
+        if (formState === FormState.UPDATE && supplier) {
+            SupplierService.updateSupplier(supplier)
+        } else {
+            SupplierService.createSupplier(values.name, values.inn)
                 .then(() => {
                     form.reset()
                     setIsOpen(false)
                 })
-
+        }
     }
     return (
         <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
-            <Button onClick={() => setIsOpen(true)} className={cn(!updating && "w-full")}>{updating ? "Edit" : "New"}</Button>
+            <Button onClick={() => setIsOpen(true)} className={cn(formState === FormState.CREATE && "w-full")}>{formState === FormState.UPDATE ? "Изменить" : "Создать"}</Button>
             <DialogContent>
                 <ScrollArea className="h-auto">
                     <DialogHeader>
-                        <DialogTitle>Create supplier</DialogTitle>
+                        <DialogTitle>
+                            {formState === FormState.CREATE ? "Создать поставщика" : "Изменить поставщика"}
+                        </DialogTitle>
                         <DialogDescription>
-                            Enter the characteristics below
+                            Введите характеристики ниже
                         </DialogDescription>
                     </DialogHeader>
                     <Form {...form}>
@@ -77,12 +77,12 @@ const SupplierForm: FC<SupplierFormProps> = ({
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Name</FormLabel>
+                                        <FormLabel>Имя</FormLabel>
                                         <FormControl>
-                                            <Input autoComplete="name" placeholder="Moose Horns" {...field} />
+                                            <Input autoComplete="name" placeholder="Рога и копыта" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            Supplier's name
+                                           Имя поставщика
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -93,20 +93,20 @@ const SupplierForm: FC<SupplierFormProps> = ({
                                 name="inn"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>INN</FormLabel>
+                                        <FormLabel>ИНН</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="12 digits number" {...field} />
+                                            <Input placeholder="123456789101" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            Supplier's INN
+                                           12 цифр
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
                             <DialogFooter >
-                                <DialogClose>Cancel</DialogClose>
-                                <Button type="submit" >{updating ? "Save" : "Create"}</Button>
+                                <DialogClose>Отмена</DialogClose>
+                                <Button type="submit" >{formState === FormState.UPDATE ? "Обновить" : "Создать"}</Button>
                             </DialogFooter>
                         </form>
                     </Form>

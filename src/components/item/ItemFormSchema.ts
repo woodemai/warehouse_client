@@ -11,12 +11,6 @@ const formSchema = z.object({
     }).max(300, {
         message: "Description must be less than 300 characters"
     }),
-    supplierId: z.string().min(2, {
-        message: "Manufacturer must be at least 2 characters"
-    }).max(50, {
-        message: "Manufacturer must be less than 50 characters"
-    }),
-    categoryId: z.string(),
     productionDate: z.date().min(new Date("2020-01-01"), { message: "Too old" }),
     expirationDate: z.date().min(new Date("2020-01-01"), { message: "Too old" }),
     storageCondition: z.string().min(8, {
@@ -25,6 +19,8 @@ const formSchema = z.object({
         message: "Storage condition must be less than 100 characters"
     }),
     weight: z.coerce.number(),
-    price: z.coerce.number()
+    price: z.coerce.number(),
+    categoryId: z.string(),
+    supplierId: z.string(),
 })
 export default formSchema;

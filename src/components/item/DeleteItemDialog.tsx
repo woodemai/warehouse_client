@@ -9,31 +9,34 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Button } from "../ui/button";
-import axios from "axios";
 import { FC, useState } from "react";
+import { IItem } from "@/models/IItem";
+import ItemService from "@/services/ItemService";
+import {useNavigate} from 'react-router-dom'
 interface DeleteItemDialogProps {
-    id: string
-    name: string
+    item: IItem
 }
-const DeleteItemDialog:FC<DeleteItemDialogProps> = ({id,name}) => {
+const DeleteItemDialog: FC<DeleteItemDialogProps> = ({ item }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate()
     const deleteItem = () => {
-        axios.delete(`http://localhost:8080/item/${id}`)
+        ItemService.deleteItem(item.id)
+            .finally(() => navigate('/'))
     }
     return (
         <AlertDialog open={isOpen} onOpenChange={() => setIsOpen(!open)}>
-            <Button onClick={() => setIsOpen(true)} variant="destructive">Delete</Button>
+            <Button onClick={() => setIsOpen(true)} variant="destructive">Удалить</Button>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure you want to delete {name}?</AlertDialogTitle>
+                    <AlertDialogTitle>Вы точно хотите удалить {item.name}?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your item
-                        and remove its data from our servers.
+                        Это действие нельзя отменить. После удаления вся информация будет навсегда
+                        удалена с нашего сервера.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={deleteItem}>Yes, delete</AlertDialogAction>
+                    <AlertDialogCancel>Отмена</AlertDialogCancel>
+                    <AlertDialogAction onClick={deleteItem}>Да, удалить</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

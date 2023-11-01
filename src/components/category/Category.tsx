@@ -7,28 +7,25 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { ICategory } from "@/models/ICategory";
 
 export interface CategoryProps {
-    id: string,
-    name: string,
-    description: string
+    category: ICategory
 }
 
 const Category: FC<CategoryProps> = ({
-    id,
-    name,
-    description
+    category
 }) => {
     return (
         <Dialog>
-            <DialogTrigger className='flex flex-col hover:scale-105 cursor-pointer transition-all durantion-100 md:max-w-lg lg:max-w-xl justify-between p-4 border-gray-300 text-gray-700 border rounded-md mb-4 shadow-md'>
-                <h2 className="font-semiblod text-xl tracking-tight">{name}</h2>
-                <p className='font-light'>{description}</p>
+            <DialogTrigger className='bg-background flex flex-col hover:scale-105 cursor-pointer transition-all durantion-100 md:max-w-lg lg:max-w-xl justify-between p-4 border-gray-300 text-gray-700 border rounded-md shadow-md'>
+                <h2 className="font-semiblod text-xl tracking-tight">{category.name}</h2>
+                <p className='font-light'>{category.description}</p>
             </DialogTrigger>
-            <DialogContent className='flex flex-col gap-y-8'>
+            <DialogContent className='outlineflex flex-col gap-y-8'>
                 <DialogHeader>
-                    <DialogTitle>{name}</DialogTitle>
-                    <DialogDescription>{description}</DialogDescription>
+                    <DialogTitle>{category.name}</DialogTitle>
+                    <DialogDescription>{category.description}</DialogDescription>
                 </DialogHeader>
                 <div className='flex flex-row justify-between'>
                 </div>

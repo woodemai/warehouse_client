@@ -1,5 +1,4 @@
 import MainTabs from "@/components/MainTabs";
-import Header from "@/components/header/Header";
 import { ICategory } from "@/models/ICategory";
 import { IItem } from "@/models/IItem";
 import { ISupplier } from "@/models/ISupplier";
@@ -17,14 +16,7 @@ const Home = () => {
         CategoryService.getCategorires().then(res => setCategoires(res.data))
         SupplierService.getSuppliers().then(res => setSuppliers(res.data))
     }, []);
-    return (
-        <>
-            <Header />
-            <div className="mt-20">
-                <MainTabs items={items} categories={categories} suppliers={suppliers} />
-            </div>
-        </>
-    );
+    return <MainTabs items={items} categories={categories} suppliers={suppliers} />
 }
 
 export default Home;

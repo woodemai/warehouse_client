@@ -43,15 +43,14 @@ import { ICategory } from "@/models/ICategory"
 import { ISupplier } from "@/models/ISupplier"
 import ItemService from "@/services/ItemService"
 import { IItem } from "@/models/IItem"
-import { FormState } from "./formState"
+import { FormState } from "../../models/formState"
+import { Textarea } from "../ui/textarea"
 
 
 interface ItemFormProps {
     categories: ICategory[],
     suppliers: ISupplier[],
     item?: IItem,
-    category?: ICategory,
-    supplier?: ISupplier
     formState: FormState
 }
 const ItemForm: FC<ItemFormProps> = ({
@@ -66,24 +65,48 @@ const ItemForm: FC<ItemFormProps> = ({
         defaultValues: {
             name: item?.name ?? "",
             description: item?.description ?? "",
-            supplierId: item?.supplierId,
             storageCondition: item?.storageCondition ?? "",
             productionDate: new Date(),
             expirationDate: new Date(),
-            categoryId: item?.categoryId,
             weight: item?.weight ?? 0,
-            price: item?.price ?? 0
+            price: item?.price ?? 0,
+            supplierId: item?.supplierId,
+            categoryId: item?.categoryId,
         },
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        if (formState === FormState.CREATE) {
-            ItemService.createItem({ ...values })
+        if (formState === FormState.UPDATE && item) {
+            const {
+                name,
+                description,
+                productionDate,
+                expirationDate,
+                storageCondition,
+                weight,
+                price,
+                categoryId,
+                supplierId
+            } = values
+            const updatedItem: IItem = {
+                id: item.id,
+                name,
+                description,
+                productionDate,
+                expirationDate,
+                storageCondition,
+                weight,
+                price,
+                categoryId,
+                supplierId
+            }
+            ItemService.updateItem(updatedItem)
                 .then(() => {
                     form.reset()
                     setIsOpen(false)
                 })
+
         } else {
-            ItemService.updateItem({ ...values })
+            ItemService.createItem({ ...values })
                 .then(() => {
                     form.reset()
                     setIsOpen(false)
@@ -92,13 +115,16 @@ const ItemForm: FC<ItemFormProps> = ({
     }
     return (
         <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
-            <Button onClick={() => setIsOpen(true)} className={cn(formState === FormState.CREATE && "w-full")}>{formState === FormState.UPDATE ? "Edit" : "New"}</Button>
-            <DialogContent>
+            <Button onClick={() => setIsOpen(true)}
+                className={cn(formState === FormState.CREATE && "w-full")}>
+                {formState === FormState.UPDATE ? "Изменить" : "Создать"}
+            </Button>
+            <DialogContent className="bg-white">
                 <ScrollArea className="h-[34rem]">
                     <DialogHeader>
-                        <DialogTitle>Create new item</DialogTitle>
+                        <DialogTitle>Создать новый предмет</DialogTitle>
                         <DialogDescription>
-                            Create your new item
+                            Введите характеристики ниже
                         </DialogDescription>
                     </DialogHeader>
                     <Form {...form}>
@@ -108,12 +134,12 @@ const ItemForm: FC<ItemFormProps> = ({
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Name</FormLabel>
+                                        <FormLabel>Название</FormLabel>
                                         <FormControl>
-                                            <Input autoComplete="name" placeholder="Moose Horns" {...field} />
+                                            <Input autoComplete="name" placeholder="Копыта" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            New item's name
+                                            Название нового предмета
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -124,12 +150,12 @@ const ItemForm: FC<ItemFormProps> = ({
                                 name="description"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Description</FormLabel>
+                                        <FormLabel>Описание</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="These are the strongest best and coolest horns" {...field} />
+                                            <Textarea placeholder="Самые лошадиные копыта на диком западе" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            New item's description
+                                            Описание нового предмета
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -140,7 +166,7 @@ const ItemForm: FC<ItemFormProps> = ({
                                 name="supplierId"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Supplier</FormLabel>
+                                        <FormLabel>Поставщик</FormLabel>
                                         <Popover>
                                             <PopoverTrigger asChild>
                                                 <FormControl>
@@ -156,15 +182,15 @@ const ItemForm: FC<ItemFormProps> = ({
                                                             ? suppliers.find(
                                                                 (supplier) => supplier.id === field.value
                                                             )?.name
-                                                            : "Select supplier"}
+                                                            : "Выберите поставщика"}
                                                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                     </Button>
                                                 </FormControl>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-[200px] p-0">
                                                 <Command>
-                                                    <CommandInput placeholder="Search supplier..." />
-                                                    <CommandEmpty>No supplier found.</CommandEmpty>
+                                                    <CommandInput placeholder="Найти поставщика..." />
+                                                    <CommandEmpty>Поставщик не найден</CommandEmpty>
                                                     <CommandGroup>
                                                         {suppliers.map((supplier) => (
                                                             <CommandItem
@@ -190,7 +216,7 @@ const ItemForm: FC<ItemFormProps> = ({
                                             </PopoverContent>
                                         </Popover>
                                         <FormDescription>
-                                            This is the category of the item.
+                                            Поставщик нового предмета
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -201,7 +227,7 @@ const ItemForm: FC<ItemFormProps> = ({
                                 name="categoryId"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel>Category</FormLabel>
+                                        <FormLabel>Категория</FormLabel>
                                         <Popover>
                                             <PopoverTrigger asChild>
                                                 <FormControl>
@@ -217,15 +243,15 @@ const ItemForm: FC<ItemFormProps> = ({
                                                             ? categories.find(
                                                                 (category) => category.id === field.value
                                                             )?.name
-                                                            : "Select category"}
+                                                            : "Выберите категорию"}
                                                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                     </Button>
                                                 </FormControl>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-[200px] p-0">
                                                 <Command>
-                                                    <CommandInput placeholder="Search category..." />
-                                                    <CommandEmpty>No category found.</CommandEmpty>
+                                                    <CommandInput placeholder="Найти категорию..." />
+                                                    <CommandEmpty>Категория не найдена.</CommandEmpty>
                                                     <CommandGroup>
                                                         {categories.map((category) => (
                                                             <CommandItem
@@ -251,7 +277,7 @@ const ItemForm: FC<ItemFormProps> = ({
                                             </PopoverContent>
                                         </Popover>
                                         <FormDescription>
-                                            This is the category of the item.
+                                            Категория нового предмета
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -262,7 +288,7 @@ const ItemForm: FC<ItemFormProps> = ({
                                 name="productionDate"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel htmlFor={field.name}>Production date</FormLabel>
+                                        <FormLabel htmlFor={field.name}>Дата производства</FormLabel>
                                         <Popover>
                                             <PopoverTrigger asChild>
                                                 <Button
@@ -274,7 +300,7 @@ const ItemForm: FC<ItemFormProps> = ({
                                                     )}
                                                 >
                                                     <CalendarIcon className="mr-2 h-4 w-4" />
-                                                    {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                                                    {field.value ? format(field.value, "PPP") : <span>Выберите дату</span>}
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-auto p-0">
@@ -287,7 +313,7 @@ const ItemForm: FC<ItemFormProps> = ({
                                             </PopoverContent>
                                         </Popover>
                                         <FormDescription>
-                                            Item's production date
+                                            Дата производства нового предмета
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -298,7 +324,7 @@ const ItemForm: FC<ItemFormProps> = ({
                                 name="expirationDate"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
-                                        <FormLabel htmlFor={field.name}>Expiration date</FormLabel>
+                                        <FormLabel htmlFor={field.name}>Срок годности</FormLabel>
                                         <Popover>
                                             <PopoverTrigger asChild>
                                                 <Button
@@ -310,7 +336,7 @@ const ItemForm: FC<ItemFormProps> = ({
                                                     )}
                                                 >
                                                     <CalendarIcon className="mr-2 h-4 w-4" />
-                                                    {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                                                    {field.value ? format(field.value, "PPP") : <span>Выберите дату</span>}
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-auto p-0">
@@ -323,7 +349,7 @@ const ItemForm: FC<ItemFormProps> = ({
                                             </PopoverContent>
                                         </Popover>
                                         <FormDescription>
-                                            Item's expiration date
+                                            Годен до
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -334,12 +360,12 @@ const ItemForm: FC<ItemFormProps> = ({
                                 name="storageCondition"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Storage condition</FormLabel>
+                                        <FormLabel>Условия хранения</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Store in a warm, dry place" {...field} />
+                                            <Input placeholder="Хранить в теплом сухом месте" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            Your item Storage condition
+                                            Условия хранения нового предмета
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -350,12 +376,12 @@ const ItemForm: FC<ItemFormProps> = ({
                                 name="weight"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Weight</FormLabel>
+                                        <FormLabel>Вес</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="65"  {...field} />
+                                            <Input placeholder="65кг"  {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            New item's weight
+                                            Вес нового предмета
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -366,20 +392,20 @@ const ItemForm: FC<ItemFormProps> = ({
                                 name="price"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Price</FormLabel>
+                                        <FormLabel>Цена</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="73" {...field} />
+                                            <Input placeholder="1999 ₽" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                            New item's price
+                                            Цена нового предмета
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
                             <div className="flex justify-between">
-                                <Button type="button" variant="secondary">Cancel</Button>
-                                <Button type="submit" >{formState === FormState.UPDATE ? "Save" : "Create"}</Button>
+                                <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>Отмена</Button>
+                                <Button type="submit" >{formState === FormState.UPDATE ? "Обновить" : "Создать"}</Button>
                             </div>
                         </form>
                     </Form>
