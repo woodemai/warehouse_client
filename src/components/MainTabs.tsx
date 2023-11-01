@@ -30,7 +30,7 @@ const MainTabs: FC<MainTabsProps> = ({
     const [filteredItems, setFilteredItems] = useState(items);
     return (
         <Tabs defaultValue="items">
-            <TabsList className="mx-auto w-full bg-transperent">
+            <TabsList className=" text-gray-800 mx-auto w-full bg-transperent">
                 <TabsTrigger value="items">Предметы</TabsTrigger>
                 <TabsTrigger value="categories">Категории</TabsTrigger>
                 <TabsTrigger value="suppliers">Поставщики</TabsTrigger>

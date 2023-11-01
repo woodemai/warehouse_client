@@ -43,7 +43,7 @@ const AuthForm = () => {
         return <Navigate to={"/profile"} />
     }
     return (
-        <div className="flex justify-center items-center h-screen">
+        <div className="flex justify-center items-center h-full">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full sm:max-w-sm lg:max-w-lg bg-white flex flex-col gap-y-4 p-4 rounded-xl shadow-md pace-y-8 mx-4">
                     <h1 className="text-xl font-bold tracking-tight">

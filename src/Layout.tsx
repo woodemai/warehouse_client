@@ -4,7 +4,7 @@ const Layout = () => {
     return (
         <>
             <Header />
-            <div className="pt-20 w-full h-screen bg-gray-50">
+            <div className="pt-20 w-full h-screen bg-gray-100">
                 <Outlet />
             </div>
         </>
