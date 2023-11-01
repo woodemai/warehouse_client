@@ -76,7 +76,30 @@ const ItemForm: FC<ItemFormProps> = ({
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         if (formState === FormState.UPDATE && item) {
-            ItemService.updateItem({ ...values }, item.id)
+            const {
+                name,
+                description,
+                productionDate,
+                expirationDate,
+                storageCondition,
+                weight,
+                price,
+                categoryId,
+                supplierId
+            } = values
+            const updatedItem: IItem = {
+                id: item.id,
+                name,
+                description,
+                productionDate,
+                expirationDate,
+                storageCondition,
+                weight,
+                price,
+                categoryId,
+                supplierId
+            }
+            ItemService.updateItem(updatedItem, item.id)
                 .then(() => {
                     form.reset()
                     setIsOpen(false)
