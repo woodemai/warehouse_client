@@ -1,28 +1,28 @@
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Context } from "@/main";
-import { IUser } from "@/models/IUser";
-import { IUserRole } from "@/models/IUserRole";
-import { FC, useContext, useEffect, useState } from "react";
+import { UserRole } from "@/models/UserRole";
+import { observer } from "mobx-react-lite";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-interface UserInfoProps {
-    user: IUser
-}
-
-const UserInfo: FC<UserInfoProps> = ({ user }) => {
+const UserInfo = () => {
+    const { store } = useContext(Context);
     const [role, setRole] = useState("Клиент")
     const [open, setOpen] = useState(false)
-    const { store } = useContext(Context);
+    const [user, setUser] = useState(store.user)
     const navigate = useNavigate()
     useEffect(() => {
-        if(user.role === IUserRole.EMPLOYEE) {
+        setUser(store.user)
+    }, [store.user]);
+    useEffect(() => {
+        if (user.role === UserRole.EMPLOYEE) {
             setRole("Сотрудник")
         }
     }, []);
     const onClick = async () => {
         await store.logout()
-        .finally(() => navigate('/auth'))
+            .finally(() => navigate('/auth'))
 
     }
     return (
@@ -52,4 +52,4 @@ const UserInfo: FC<UserInfoProps> = ({ user }) => {
     );
 }
 
-export default UserInfo;
+export default observer(UserInfo);

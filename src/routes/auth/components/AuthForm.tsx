@@ -13,10 +13,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import formSchema from "./authFormSchema";
-import { useContext, useState } from "react"
+import { useCallback, useContext, useState } from "react"
 import { Context } from "@/main"
 import { observer } from 'mobx-react-lite'
 import { Navigate } from "react-router-dom"
+import { useToast } from "@/components/ui/use-toast"
 
 enum Action {
     LOGIN,
@@ -26,19 +27,43 @@ enum Action {
 const AuthForm = () => {
     const [action, setAction] = useState<Action>(Action.LOGIN)
     const { store } = useContext(Context);
-    const form = useForm<z.infer<typeof formSchema>>({ resolver: zodResolver(formSchema) ,
-    defaultValues: {
-        email: "",
-        password: ""
-    }})
+    const { toast } = useToast()
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: "",
+            password: ""
+        }
+    })
+
+    const onError = useCallback(() => {
+        if (store.error) {
+            let description;
+            if (store.error === 409) {
+                description = 'Пользователь с такой почтой уже существует'
+            } else if (store.error === 401) {
+                description = 'Введен неверный пароль'
+            }
+            store.setError(undefined)
+            toast({
+                variant: 'destructive',
+                title: "Ошибка!",
+                description,
+                duration: 2500
+            })
+        }
+    }, [store, toast])
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         const { email, password } = values;
         if (action === Action.LOGIN) {
-            store.login(email, password);
+            store.login(email, password)
+                .then(() => onError())
         } else {
-            store.registration(email, password);
+            store.registration(email, password)
+                .then(() => onError())
         }
     }
+
     if (store.isAuth) {
         return <Navigate to={"/profile"} />
     }

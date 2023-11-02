@@ -7,6 +7,8 @@ import AuthPage from './routes/auth/AuthPage';
 import ProfilePage from './routes/profile/ProfilePage';
 import Home from './routes/home/Home';
 import Layout from './Layout';
+import ProtectedRoute from './routes/auth/components/ProtectedRoute';
+import UnAuthPage from './routes/unauth/UnAuth';
 
 const router = createBrowserRouter([
   {
@@ -14,15 +16,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <ProtectedRoute><Home /></ProtectedRoute>,
       },
       {
         path: "/profile",
-        element: <ProfilePage />,
+        element: <ProtectedRoute><ProfilePage /></ProtectedRoute>
       },
       {
         path: '/auth',
         element: <AuthPage />
+      },
+      {
+        path: '/unauth',
+        element: <UnAuthPage />
       }
     ]
   },
@@ -40,6 +46,7 @@ function App() {
       const user: IUser = JSON.parse(userItem)
       store.setUser(user)
     }
+
   }, []);
 
   return <RouterProvider router={router} />

@@ -9,6 +9,7 @@ export default class Store {
     user = {} as IUser;
     isAuth = false
     isLoading = false
+    error: number | undefined = undefined;
 
     constructor() {
         makeAutoObservable(this);
@@ -23,6 +24,9 @@ export default class Store {
     setIsLoading(bool: boolean) {
         this.isLoading = bool;
     }
+    setError(error: number | undefined) {
+        this.error = error
+    }
     async login(email: string, password: string) {
         this.setIsLoading(true);
         try {
@@ -32,7 +36,13 @@ export default class Store {
             this.setAuth(true);
             this.setUser(response.data.user);
         } catch (error) {
-            console.log(error)
+            console.log(error.response)
+            if (error.response.status === 401) {
+                this.setError(error.response.status)
+
+            } else {
+                console.log(error.response.status)
+            }
         } finally {
             this.setIsLoading(false);
         }
@@ -41,13 +51,18 @@ export default class Store {
     async registration(email: string, password: string) {
         this.setIsLoading(true);
         try {
-            const response = await AuthService.registration(email, password);
+            const response = await AuthService.registration(email, password)
             localStorage.setItem('token', response.data.accessToken);
             localStorage.setItem('user', JSON.stringify(response.data.user));
             this.setAuth(true);
             this.setUser(response.data.user);
         } catch (error) {
-            console.log(error)
+            console.log(error.response)
+            if (error.response.status === 409) {
+                this.setError(error.response.status)
+            } else {
+                console.log(error.response.status)
+            }
         } finally {
             this.setIsLoading(false);
         }
@@ -75,7 +90,7 @@ export default class Store {
             this.setAuth(true);
             this.setUser(response.data.user);
         } catch (error) {
-            console.log(error)
+            console.log(error.response.data)
         } finally {
             this.setIsLoading(false);
         }

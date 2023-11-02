@@ -2,17 +2,7 @@ import api from "@/lib/http";
 import { IItem } from "@/models/IItem";
 import { AxiosResponse } from "axios";
 
-interface CreatedItem {
-    name: string,
-    description: string,
-    productionDate: Date,
-    expirationDate: Date,
-    storageCondition: string,
-    supplierId: string,
-    categoryId: string,
-    weight: number,
-    price: number,
-}
+type CreatedItem = Omit<IItem, 'id'>
 
 export default class ItemService {
     static async getItems(): Promise<AxiosResponse<IItem[]>> {

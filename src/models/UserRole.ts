@@ -1,4 +1,4 @@
-export enum IUserRole {
+export enum UserRole {
     "CLIENT",
     "EMPLOYEE"
 }

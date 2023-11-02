@@ -15,7 +15,6 @@ const Header = () => {
     const { store } = useContext(Context)
     const [routes, setRoutes] = useState(defaultRoutes);
     useEffect(() => {
-        console.log(store.isAuth)
         if (!store.isAuth) {
             setRoutes([...defaultRoutes, { path: "/auth", title: 'Войти' }])
         } else {
