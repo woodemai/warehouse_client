@@ -46,7 +46,7 @@ const Item: FC<ItemProps> = ({
     return (
         <Dialog>
             <DialogTrigger>
-                <div className='bg-background hover:scale-105 cursor-pointer transition-all durantion-100 md:max-w-lg lg:max-w-xl flex flex-row justify-between p-4 border-gray-300 text-gray-700 border rounded-md shadow-md'>
+                <div className='bg-background hover:scale-105 cursor-pointer transition-all durantion-100 md:max-w-lg lg:max-w-xl flex flex-row justify-between p-4 border-gray-300 text-gray-700 border rounded-lg shadow-md'>
                     <div className='leading-6'>
                         <div className='mb-4'>
                             <div className='flex flex-row gap-4 items-end'>
@@ -88,7 +88,7 @@ const Item: FC<ItemProps> = ({
                     <div className='font-light'>{item.storageCondition}</div>
                 </div>
                 <Separator />
-                <div className='flex flex-row gap-x-8'>
+                <div className='flex flex-col items-start sm:items-center justify-between sm:flex-row gap-x-8'>
                     <div className='flex flex-col justify-center items-center'>
                         <div>Цена</div>
                         <div className='font-light'>{item.price}</div>

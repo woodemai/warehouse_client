@@ -8,6 +8,9 @@ export default class ItemService {
     static async getItems(): Promise<AxiosResponse<IItem[]>> {
         return api.get<IItem[]>(`/v1/items`)
     }
+    static async get(id: string): Promise<AxiosResponse<IItem>> {
+        return api.get<IItem>(`/v1/items/${id}`)
+    }
     static async createItem(item: CreatedItem): Promise<AxiosResponse<IItem>> {
         return api.post<IItem>('/v1/items', item);
     }

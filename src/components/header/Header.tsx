@@ -27,7 +27,7 @@ const Header = () => {
             <Link to={'/'}>
                 <div className="cursor-pointer flex flex-row gap-x-4 items-center">
                     <img src={`../logo.svg`} alt="logo" width={40} height={40} />
-                    <h1 className="tracking-tight text-2xl font-bold">Warehouse</h1>
+                    <h1 className="tracking-tight text-2xl font-bold hidden sm:block">Warehouse</h1>
                 </div>
             </Link>
             <nav className="flex justify-end">

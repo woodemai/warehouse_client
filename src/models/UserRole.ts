@@ -1,4 +1,5 @@
 export enum UserRole {
-    "CLIENT",
-    "EMPLOYEE"
+    EMPLOYEE = "Сотрудник",
+    SUPPLIER = "Поставщик",
+    BUYER = "Покупатель"
 }

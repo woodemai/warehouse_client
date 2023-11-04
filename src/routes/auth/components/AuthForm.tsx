@@ -18,12 +18,24 @@ import { Context } from "@/main"
 import { observer } from 'mobx-react-lite'
 import { Navigate } from "react-router-dom"
 import { useToast } from "@/components/ui/use-toast"
-
+import { UserRole } from "@/models/UserRole"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Check, ChevronsUpDown } from "lucide-react"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command"
+import { cn } from "@/lib/utils"
 enum Action {
     LOGIN,
     REGISTRATION
 }
-
+function getUserRoleByText(text: string): UserRole | undefined {
+    const enumValues = Object.values(UserRole);
+    for (const value of enumValues) {
+      if (value === text) {
+        return value as UserRole;
+      }
+    }
+    return undefined;
+  }
 const AuthForm = () => {
     const [action, setAction] = useState<Action>(Action.LOGIN)
     const { store } = useContext(Context);
@@ -41,7 +53,7 @@ const AuthForm = () => {
             let description;
             if (store.error === 409) {
                 description = 'Пользователь с такой почтой уже существует'
-            } else if (store.error === 401) {
+            } else if (store.error === 401 || store.error === 404) {
                 description = 'Введен неверный пароль'
             }
             store.setError(undefined)
@@ -54,12 +66,12 @@ const AuthForm = () => {
         }
     }, [store, toast])
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        const { email, password } = values;
+        const { email, password, role } = values;
         if (action === Action.LOGIN) {
             store.login(email, password)
                 .then(() => onError())
         } else {
-            store.registration(email, password)
+            store.registration(email, password, role)
                 .then(() => onError())
         }
     }
@@ -108,6 +120,69 @@ const AuthForm = () => {
                             </FormItem>
                         )}
                     />
+                    {action === Action.REGISTRATION &&
+                        <FormField
+                            control={form.control}
+                            name="role"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-col">
+                                    <FormLabel>Тип аккаунта</FormLabel>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <FormControl>
+                                                <Button
+                                                    variant="outline"
+                                                    role="combobox"
+                                                    className={cn(
+                                                        "w-auto justify-between",
+                                                        !field.value && "text-muted-foreground"
+                                                    )}
+                                                >
+                                                    {field.value
+                                                        ? Object.values(UserRole).find(
+                                                            (role) => role === field.value
+                                                        )?.toString()
+                                                        : "Выберите тип аккаунта"}
+                                                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                </Button>
+                                            </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-[200px] p-0">
+                                            <Command>
+                                                <CommandInput placeholder="Найти тип..." />
+                                                <CommandEmpty>Тип не найден</CommandEmpty>
+                                                <CommandGroup>
+                                                    {Object.values(UserRole).map((role) => (
+                                                        <CommandItem
+                                                            value={role}
+                                                            key={role}
+                                                            onSelect={() => {
+                                                                form.setValue("role", role)
+                                                            }}
+                                                        >
+                                                            <Check
+                                                                className={cn(
+                                                                    "mr-2 h-4 w-4",
+                                                                    role === field.value
+                                                                        ? "opacity-100"
+                                                                        : "opacity-0"
+                                                                )}
+                                                            />
+                                                            {role}
+                                                        </CommandItem>
+                                                    ))}
+                                                </CommandGroup>
+                                            </Command>
+                                        </PopoverContent>
+                                    </Popover>
+                                    <FormDescription>
+                                        От типа зависят, доступные возможности
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    }
                     <div className="text-sm font-lighter text-gray-600">
                         {action === Action.LOGIN
                             ? <div>Впервые у нас?<Button type="button" variant={"link"} onClick={() => setAction(Action.REGISTRATION)}>Создать аккаунт</Button></div>

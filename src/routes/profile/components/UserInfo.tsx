@@ -1,14 +1,14 @@
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Context } from "@/main";
-import { UserRole } from "@/models/UserRole";
+import UserService from "@/services/UserService";
 import { observer } from "mobx-react-lite";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const UserInfo = () => {
     const { store } = useContext(Context);
-    const [role, setRole] = useState("Клиент")
+    const [role, setRole] = useState("")
     const [open, setOpen] = useState(false)
     const [user, setUser] = useState(store.user)
     const navigate = useNavigate()
@@ -16,10 +16,8 @@ const UserInfo = () => {
         setUser(store.user)
     }, [store.user]);
     useEffect(() => {
-        if (user.role === UserRole.EMPLOYEE) {
-            setRole("Сотрудник")
-        }
-    }, []);
+        setRole(UserService.getRole(store.user.role))
+    }, [store.user.role]);
     const onClick = async () => {
         await store.logout()
             .finally(() => navigate('/auth'))

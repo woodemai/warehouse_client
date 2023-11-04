@@ -37,7 +37,7 @@ export default class Store {
             this.setUser(response.data.user);
         } catch (error) {
             console.log(error.response)
-            if (error.response.status === 401) {
+            if (error.response.status === 401 || error.response.status === 404) {
                 this.setError(error.response.status)
 
             } else {
@@ -48,10 +48,10 @@ export default class Store {
         }
 
     }
-    async registration(email: string, password: string) {
+    async registration(email: string, password: string, role: string) {
         this.setIsLoading(true);
         try {
-            const response = await AuthService.registration(email, password)
+            const response = await AuthService.registration(email, password, role)
             localStorage.setItem('token', response.data.accessToken);
             localStorage.setItem('user', JSON.stringify(response.data.user));
             this.setAuth(true);

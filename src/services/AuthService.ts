@@ -6,8 +6,8 @@ export default class AuthService {
     static async login(email: string, password: string): Promise<AxiosResponse<AuthResponse >> {
         return axios.post<AuthResponse>(`${BASE_URL}/v1/auth/login`, { email, password }, { withCredentials: true })
     }
-    static async registration(email: string, password: string): Promise<AxiosResponse<AuthResponse>> {
-        return axios.post<AuthResponse>(`${BASE_URL}/v1/auth/registration`, { email, password }, { withCredentials: true })
+    static async registration(email: string, password: string, role: string): Promise<AxiosResponse<AuthResponse>> {
+        return axios.post<AuthResponse>(`${BASE_URL}/v1/auth/registration`, { email, password, role }, { withCredentials: true })
 
     }
     static async logout(): Promise<void> {
