@@ -79,10 +79,10 @@ const SupplierForm: FC<SupplierFormProps> = ({
                                     <FormItem>
                                         <FormLabel>Имя</FormLabel>
                                         <FormControl>
-                                            <Input autoComplete="name" placeholder="Рога и копыта" {...field} />
+                                            <Input autoComplete="name" placeholder="Производство №4" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                           Имя поставщика
+                                            Имя поставщика
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -98,7 +98,7 @@ const SupplierForm: FC<SupplierFormProps> = ({
                                             <Input placeholder="123456789101" {...field} />
                                         </FormControl>
                                         <FormDescription>
-                                           12 цифр
+                                            12 цифр
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>

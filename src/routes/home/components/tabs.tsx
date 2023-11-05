@@ -1,28 +1,25 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import ItemList from "./item/ItemList";
-import CategoryForm from "./category/CategoryForm";
-import CategoryList from "./category/CategoryList";
+import CategoryForm from "../../../components/category/CategoryForm";
 import { FC, useState } from "react";
-import ItemForm from "./item/ItemForm";
-import SupplierList from "./supplier/SupplierList";
-import SupplierForm from "./supplier/SupplierForm";
-import ItemsFilter from "./item/ItemsFilter";
+import ItemForm from "../../../components/item/ItemForm";
+import SupplierForm from "../../../components/supplier/SupplierForm";
+import ItemsFilter from "../../../components/item/ItemsFilter";
 import { IItem } from "@/models/IItem";
 import { ICategory } from "@/models/ICategory";
 import { ISupplier } from "@/models/ISupplier";
-import { FormState } from "../models/formState";
-import List from "./ui/list";
-import Item from "./item/Item";
-import Category from "./category/Category";
-import Supplier from "./supplier/Supplier";
+import { FormState } from "../../../models/formState";
+import List from "../../../components/ui/list";
+import Item from "../../../components/item/Item";
+import Category from "../../../components/category/Category";
+import Supplier from "../../../components/supplier/Supplier";
 
-interface MainTabsProps {
+interface TabsProps {
     items: IItem[],
     categories: ICategory[],
     suppliers: ISupplier[]
 }
 
-const MainTabs: FC<MainTabsProps> = ({
+const HomeTabs: FC<TabsProps> = ({
     items,
     categories,
     suppliers
@@ -59,4 +56,4 @@ const MainTabs: FC<MainTabsProps> = ({
     );
 }
 
-export default MainTabs;
+export default HomeTabs;

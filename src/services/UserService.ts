@@ -1,6 +1,5 @@
 import api, { BASE_URL } from "@/lib/http";
 import { IUser } from "@/models/IUser";
-import { UserRole } from "@/models/UserRole";
 import { AxiosResponse } from "axios";
 
 export default class UserService {

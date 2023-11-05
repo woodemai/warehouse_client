@@ -2,7 +2,7 @@ import { BASE_URL } from "@/lib/http";
 import { IUser } from "@/models/IUser";
 import { AuthResponse } from "@/models/response/AuthResponse";
 import AuthService from "@/services/AuthService";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { makeAutoObservable } from 'mobx'
 
 export default class Store {
@@ -36,12 +36,8 @@ export default class Store {
             this.setAuth(true);
             this.setUser(response.data.user);
         } catch (error) {
-            console.log(error.response)
-            if (error.response.status === 401 || error.response.status === 404) {
-                this.setError(error.response.status)
-
-            } else {
-                console.log(error.response.status)
+            if (error instanceof AxiosError) {
+                this.setError(error.response?.status)
             }
         } finally {
             this.setIsLoading(false);
@@ -57,11 +53,8 @@ export default class Store {
             this.setAuth(true);
             this.setUser(response.data.user);
         } catch (error) {
-            console.log(error.response)
-            if (error.response.status === 409) {
-                this.setError(error.response.status)
-            } else {
-                console.log(error.response.status)
+            if (error instanceof AxiosError) {
+                this.setError(error.response?.status)
             }
         } finally {
             this.setIsLoading(false);
@@ -90,7 +83,12 @@ export default class Store {
             this.setAuth(true);
             this.setUser(response.data.user);
         } catch (error) {
-            console.log(error.response.data)
+            if (error instanceof AxiosError && error.response?.status === 404) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                this.setAuth(false);
+                this.setUser({} as IUser);
+            }
         } finally {
             this.setIsLoading(false);
         }

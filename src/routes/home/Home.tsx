@@ -1,10 +1,10 @@
-import MainTabs from "@/components/MainTabs";
-import { ICategory } from "@/models/ICategory";
-import { IItem } from "@/models/IItem";
-import { ISupplier } from "@/models/ISupplier";
+import Tabs from "@/routes/home/components/tabs";
 import CategoryService from "@/services/CategoryService";
 import ItemService from "@/services/ItemService";
 import SupplierService from "@/services/SupplierService";
+import { ICategory } from "@/models/ICategory";
+import { IItem } from "@/models/IItem";
+import { ISupplier } from "@/models/ISupplier";
 import { useEffect, useState } from "react";
 
 const Home = () => {
@@ -16,7 +16,7 @@ const Home = () => {
         CategoryService.getCategorires().then(res => setCategoires(res.data))
         SupplierService.getSuppliers().then(res => setSuppliers(res.data))
     }, []);
-    return <MainTabs items={items} categories={categories} suppliers={suppliers} />
+    return <Tabs items={items} categories={categories} suppliers={suppliers} />
 }
 
 export default Home;
