@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/lib/http";
+import { API_URL } from "@/lib/http";
 import { IUser } from "@/models/IUser";
 import { AuthResponse } from "@/models/response/AuthResponse";
 import AuthService from "@/services/AuthService";
@@ -77,7 +77,7 @@ export default class Store {
     async checkAuth() {
         this.setIsLoading(true);
         try {
-            const response = await axios.get<AuthResponse>(`${BASE_URL}/v1/auth/refresh`, { withCredentials: true })
+            const response = await axios.get<AuthResponse>(`${API_URL}/v1/auth/refresh`, { withCredentials: true })
             localStorage.setItem('token', response.data.accessToken);
             localStorage.setItem('user', JSON.stringify(response.data.user));
             this.setAuth(true);
