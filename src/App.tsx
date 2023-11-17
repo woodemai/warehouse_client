@@ -47,7 +47,7 @@ function App() {
       store.setUser(user)
     }
 
-  }, []);
+  }, [store]);
 
   return <RouterProvider router={router} />
 }
