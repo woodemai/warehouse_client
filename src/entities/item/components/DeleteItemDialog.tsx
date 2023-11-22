@@ -10,17 +10,17 @@ import {
 } from "@/shared/components/ui/alert-dialog"
 import { Button } from "../../../shared/components/ui/button";
 import { FC, useState } from "react";
-import { IItem } from "@/entities/item/models/IItem";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { ItemService } from "../api/ItemService";
 interface DeleteItemDialogProps {
-    item: IItem
+    id: string,
+    name: string,
 }
-const DeleteItemDialog: FC<DeleteItemDialogProps> = ({ item }) => {
+const DeleteItemDialog: FC<DeleteItemDialogProps> = ({ id, name }) => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate()
     const deleteItem = () => {
-        ItemService.deleteItem(item.id)
+        ItemService.deleteItem(id)
             .finally(() => navigate('/'))
     }
     return (
@@ -28,7 +28,7 @@ const DeleteItemDialog: FC<DeleteItemDialogProps> = ({ item }) => {
             <Button onClick={() => setIsOpen(true)} variant="destructive">Удалить</Button>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Вы точно хотите удалить {item.name}?</AlertDialogTitle>
+                    <AlertDialogTitle>Вы точно хотите удалить {name}?</AlertDialogTitle>
                     <AlertDialogDescription>
                         Это действие нельзя отменить. После удаления вся информация будет навсегда
                         удалена с нашего сервера.

@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import DeleteItemDialog from './DeleteItemDialog';
 import { Separator } from "@/shared/components/ui/separator"
-
+import { IItem } from '@/entities/item';
+import { ISupplier, SupplierService } from '@/entities/supplier';
+import { CategoryService, ICategory } from '@/entities/category';
+import ItemControlButtons from './ItemControlButtons';
 import {
     Dialog,
     DialogContent,
@@ -10,37 +12,12 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/shared/components/ui/dialog"
-import { IItem } from '@/entities/item/models/IItem';
-import { FormState } from '../../../shared/consts/formState';
-import { ItemForm } from '..';
-import { ISupplier, SupplierService } from '@/entities/supplier';
-import { CategoryService, ICategory } from '@/entities/category';
-
-
 export const Item = (
     {
-        item
+        item,
     }: {
         item: IItem
     }) => {
-    const [supplier, setSupplier] = useState<ISupplier>({} as ISupplier)
-    const [category, setCategory] = useState<ICategory>({} as ICategory)
-    const [suppliers, setSuppliers] = useState<ISupplier[]>([]);
-    const [categories, setCategories] = useState<ICategory[]>([]);
-    useEffect(() => {
-        const category = categories.find(category => category.id === item.categoryId);
-        if (category !== undefined) {
-            setCategory(category)
-        }
-        const supplier = suppliers.find(supplier => supplier.id === item.supplierId);
-        if (supplier !== undefined) {
-            setSupplier(supplier)
-        }
-    }, [item.categoryId, item.supplierId, categories, suppliers]);
-    useEffect(() => {
-        SupplierService.getSuppliers().then(res => setSuppliers(res.data))
-        CategoryService.getCategorires().then(res => setCategories(res.data))
-    }, []);
     return (
         <Dialog>
             <DialogTrigger>
@@ -56,7 +33,7 @@ export const Item = (
                                 </div>
                             </div>
                             <div className='font-light text-left'>
-                                <p>{supplier.name}</p>
+                                <p>{item.supplier.name}</p>
                             </div>
                         </div>
                         <div>
@@ -69,7 +46,7 @@ export const Item = (
             <DialogContent className='flex flex-col gap-y-4'>
                 <DialogHeader>
                     <DialogTitle>{item.name}</DialogTitle>
-                    <DialogDescription>{category.name}</DialogDescription>
+                    <DialogDescription>{item.category.name}</DialogDescription>
                 </DialogHeader>
                 <div>
                     <div>Описание</div>
@@ -78,7 +55,7 @@ export const Item = (
                 <Separator />
                 <div>
                     <div>Поставщик</div>
-                    <div className='font-light'>{supplier.name}</div>
+                    <div className='font-light'>{item.supplier.name}</div>
                 </div>
                 <Separator />
                 <div>
@@ -104,14 +81,7 @@ export const Item = (
                         <div className='font-light'>{String(item.expirationDate)}</div>
                     </div>
                 </div>
-                <div className='flex flex-row justify-between'>
-                    <DeleteItemDialog item={item} />
-                    <ItemForm
-                        categories={categories}
-                        suppliers={suppliers}
-                        item={item}
-                        formState={FormState.UPDATE} />
-                </div>
+                <ItemControlButtons item={item} />
             </DialogContent>
         </Dialog>
     );

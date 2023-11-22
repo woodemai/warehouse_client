@@ -29,7 +29,7 @@ import { format } from "date-fns"
 import { Calendar as CalendarIcon, Check, ChevronsUpDown } from "lucide-react"
 import { cn } from "@/shared/lib/shadcn/utils"
 import { ScrollArea } from "@/shared/components/ui/scroll-area"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import {
     Command,
     CommandEmpty,
@@ -37,27 +37,32 @@ import {
     CommandInput,
     CommandItem,
 } from "@/shared/components/ui/command"
-import formSchema from "./ItemFormSchema";
+import formSchema from "../ItemFormSchema";
 import { IItem } from "@/entities/item/models/IItem"
-import { FormState } from "../../../shared/consts/formState"
-import { Textarea } from "../../../shared/components/ui/textarea"
-import { ItemService } from "../api/ItemService"
-import { ICategory } from "@/entities/category"
-import { ISupplier } from "@/entities/supplier"
+import { FormState } from "../../../../shared/consts/formState"
+import { Textarea } from "../../../../shared/components/ui/textarea"
+import { ItemService } from "../../api/ItemService"
+import { CategoryService, ICategory } from "@/entities/category"
+import { ISupplier, SupplierService } from "@/entities/supplier"
+import OpenFormButton from "./OpenFormButton"
 
 
 interface ItemFormProps {
-    categories: ICategory[],
-    suppliers: ISupplier[],
     item?: IItem,
     formState: FormState
 }
 export const ItemForm: FC<ItemFormProps> = ({
-    categories,
-    suppliers,
     item,
     formState
 }) => {
+    const [categories, setCategories] = useState<ICategory[]>([]);
+    const [suppliers, setSuppliers] = useState<ISupplier[]>([]);
+
+    useEffect(() => {
+        CategoryService.getCategorires().then(res => setCategories(res.data));
+        SupplierService.getSuppliers().then(res => setSuppliers(res.data));
+    }, []);
+
     const [isOpen, setIsOpen] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -114,10 +119,7 @@ export const ItemForm: FC<ItemFormProps> = ({
     }
     return (
         <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
-            <Button onClick={() => setIsOpen(true)}
-                className={cn(formState === FormState.CREATE && "w-full")}>
-                {formState === FormState.UPDATE ? "Изменить" : "Создать"}
-            </Button>
+            <OpenFormButton setIsOpen={setIsOpen} formState={formState} />
             <DialogContent className="bg-white">
                 <ScrollArea className="h-[34rem]">
                     <DialogHeader>

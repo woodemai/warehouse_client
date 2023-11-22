@@ -1,3 +1,6 @@
+import { ICategory } from "@/entities/category"
+import { ISupplier } from "@/entities/supplier"
+
 export interface IItem {
     id: string,
     name:string,
@@ -5,8 +8,8 @@ export interface IItem {
     productionDate: Date,
     expirationDate: Date,
     storageCondition: string,
-    supplierId: string,
-    categoryId: string,
+    supplier: ISupplier
+    category: ICategory
     weight: number,
     price: number
 }

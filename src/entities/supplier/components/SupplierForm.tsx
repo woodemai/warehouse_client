@@ -23,7 +23,7 @@ import {
 import { Input } from "@/shared/components/ui/input"
 import { Button } from "@/shared/components/ui/button"
 import { ScrollArea } from "@/shared/components/ui/scroll-area"
-import { FC, useState } from "react";
+import { FC, memo, useState } from "react";
 import { cn } from "@/shared/lib/shadcn/utils";
 import { FormState } from "@/shared/consts/formState";
 import { ISupplier } from "@/entities/supplier/models/ISupplier";
@@ -34,7 +34,7 @@ interface SupplierFormProps {
     formState: FormState,
     supplier?: ISupplier
 }
-export const SupplierForm: FC<SupplierFormProps> = ({
+export const SupplierForm: FC<SupplierFormProps> = memo(({
     formState,
     supplier
 }) => {
@@ -114,4 +114,4 @@ export const SupplierForm: FC<SupplierFormProps> = ({
             </DialogContent>
         </Dialog>
     );
-}
+})
