@@ -10,13 +10,11 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/shared/components/ui/dialog"
-import { ICategory } from '@/entities/category/models/ICategory';
-import { ISupplier } from '@/entities/supplier/models/ISupplier';
 import { IItem } from '@/entities/item/models/IItem';
-import SupplierService from '@/entities/supplier/api/SupplierService';
-import CategoryService from '@/entities/category/api/CategoryService';
 import { FormState } from '../../../shared/consts/formState';
 import { ItemForm } from '..';
+import { ISupplier, SupplierService } from '@/entities/supplier';
+import { CategoryService, ICategory } from '@/entities/category';
 
 
 export const Item = (

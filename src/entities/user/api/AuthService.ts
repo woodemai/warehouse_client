@@ -2,7 +2,7 @@ import api, { API_URL } from "@/shared/api/http";
 import { AuthResponse } from "@/entities/user/models/AuthResponse";
 import axios, { AxiosResponse } from "axios";
 
-export default class AuthService {
+export class AuthService {
     static async login(email: string, password: string): Promise<AxiosResponse<AuthResponse >> {
         return axios.post<AuthResponse>(`${API_URL}/v1/auth/login`, { email, password }, { withCredentials: true })
     }

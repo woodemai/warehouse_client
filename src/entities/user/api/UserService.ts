@@ -2,7 +2,7 @@ import api, { API_URL } from "@/shared/api/http";
 import { IUser } from "@/entities/user/models/IUser";
 import { AxiosResponse } from "axios";
 
-export default class UserService {
+export class UserService {
     static async getUser(id: string): Promise<AxiosResponse<IUser>> {
         return api.get<IUser>(`${API_URL}/v1/user/${id}`)
     }

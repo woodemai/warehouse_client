@@ -1,4 +1,6 @@
+import { useCallback, useState } from "react"
 import { useForm } from "react-hook-form"
+import { useStore } from "@/shared/hooks/useStore"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import {
@@ -12,9 +14,6 @@ import {
 } from "@/shared/components/ui/form"
 import { Input } from "@/shared/components/ui/input"
 import { Button } from "@/shared/components/ui/button"
-import formSchema from "./authFormSchema";
-import { useCallback, useContext, useState } from "react"
-import { Context } from "@/main"
 import { observer } from 'mobx-react-lite'
 import { Navigate } from "react-router-dom"
 import { useToast } from "@/shared/components/ui/use-toast"
@@ -23,8 +22,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/
 import { Check, ChevronsUpDown } from "lucide-react"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/shared/components/ui/command"
 import { cn } from "@/shared/lib/shadcn/utils"
-import { useStore } from "@/shared/hooks/useStore"
 import { getRole } from "@/entities/user"
+import formSchema from "./authFormSchema";
 enum Action {
     LOGIN,
     REGISTRATION

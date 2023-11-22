@@ -25,9 +25,9 @@ import { Button } from "@/shared/components/ui/button"
 import { ScrollArea } from "@/shared/components/ui/scroll-area"
 import { FC, useState } from "react";
 import { cn } from "@/shared/lib/shadcn/utils";
-import SupplierService from "@/entities/supplier/api/SupplierService";
 import { FormState } from "@/shared/consts/formState";
 import { ISupplier } from "@/entities/supplier/models/ISupplier";
+import { SupplierService } from "../api/SupplierService";
 
 
 interface SupplierFormProps {

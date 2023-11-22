@@ -23,11 +23,11 @@ import { Input } from "@/shared/components/ui/input"
 import { Button } from "@/shared/components/ui/button"
 import { ScrollArea } from "@/shared/components/ui/scroll-area"
 import { FC, useState } from "react"
-import CategoryService from "@/entities/category/api/CategoryService"
 import { FormState } from "@/shared/consts/formState"
 import { ICategory } from "@/entities/category/models/ICategory"
 import { cn } from "@/shared/lib/shadcn/utils"
 import { Textarea } from "../../../shared/components/ui/textarea"
+import { CategoryService } from ".."
 
 const formSchema = z.object({
     name: z.string().min(2, {

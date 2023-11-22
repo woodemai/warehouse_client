@@ -2,7 +2,7 @@ import api from "@/shared/api/http";
 import { ISupplier } from "@/entities/supplier/models/ISupplier";
 import { AxiosResponse } from "axios";
 
-export default class SupplierService {
+export class SupplierService {
     static async getSuppliers(): Promise<AxiosResponse<ISupplier[]>> {
         return api.get<ISupplier[]>(`/v1/suppliers`)
     }

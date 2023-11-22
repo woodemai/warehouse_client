@@ -1,9 +1,9 @@
 import { API_URL } from "@/shared/api/http";
 import { IUser } from "@/entities/user/models/IUser";
 import { AuthResponse } from "@/entities/user/models/AuthResponse";
-import AuthService from "@/entities/user/api/AuthService";
 import axios, { AxiosError } from "axios";
 import { makeAutoObservable } from 'mobx'
+import { AuthService } from "@/entities/user";
 
 export default class Store {
     user = {} as IUser;
@@ -76,13 +76,16 @@ export default class Store {
     }
     async checkAuth() {
         this.setIsLoading(true);
-        
+
         try {
             const response = await axios.get<AuthResponse>(`${API_URL}/v1/auth/refresh`, { withCredentials: true })
             localStorage.setItem('token', response.data.accessToken);
             localStorage.setItem('user', JSON.stringify(response.data.user));
             this.setAuth(true);
             this.setUser(response.data.user);
+            console.log("try");
+            console.log(this.isLoading);
+
         } catch (error) {
             if (error instanceof AxiosError && error.response?.status === 404) {
                 localStorage.removeItem('token');
@@ -95,5 +98,7 @@ export default class Store {
         } finally {
             this.setIsLoading(false);
         }
+        console.log("end");
+        console.log(this.isLoading);
     }
 }

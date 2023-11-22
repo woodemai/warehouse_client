@@ -11,8 +11,8 @@ import {
 import { Button } from "../../../shared/components/ui/button";
 import { FC, useState } from "react";
 import { IItem } from "@/entities/item/models/IItem";
-import ItemService from "@/entities/item/api/ItemService";
 import {useNavigate} from 'react-router-dom'
+import { ItemService } from "../api/ItemService";
 interface DeleteItemDialogProps {
     item: IItem
 }

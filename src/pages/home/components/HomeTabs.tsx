@@ -1,22 +1,20 @@
 import { FormState } from "../../../shared/consts/formState";
-import { FC, useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs"
-import { ISupplier, Supplier, SupplierForm } from "@/entities/supplier";
-import { Category, CategoryForm, ICategory } from "@/entities/category";
-import { IItem, Item, ItemForm, ItemsFilter } from "@/entities/item";
+import { FC, useEffect, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
+import { ISupplier, Supplier, SupplierForm, SupplierService } from "@/entities/supplier";
+import { Category, CategoryForm, CategoryService, ICategory } from "@/entities/category";
+import { IItem, Item, ItemForm, ItemService, ItemsFilter } from "@/entities/item";
 import { List } from "@/shared/components/ui/list";
 
-interface TabsProps {
-    items: IItem[],
-    categories: ICategory[],
-    suppliers: ISupplier[]
-}
-
-const HomeTabs: FC<TabsProps> = ({
-    items,
-    categories,
-    suppliers
-}) => {
+const HomeTabs: FC = () => {
+    const [items, setItems] = useState<IItem[]>([]);
+    const [categories, setCategoires] = useState<ICategory[]>([]);
+    const [suppliers, setSuppliers] = useState<ISupplier[]>([]);
+    useEffect(() => {
+        ItemService.getItems().then(res => setItems(res.data));
+        CategoryService.getCategorires().then(res => setCategoires(res.data));
+        SupplierService.getSuppliers().then(res => setSuppliers(res.data));
+    }, []);
     const [filteredItems, setFilteredItems] = useState(items);
     return (
         <Tabs defaultValue="items">
@@ -47,6 +45,5 @@ const HomeTabs: FC<TabsProps> = ({
         </Tabs>
 
     );
-}
-
+};
 export default HomeTabs;

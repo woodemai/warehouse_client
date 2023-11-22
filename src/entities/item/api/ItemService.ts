@@ -4,7 +4,7 @@ import { AxiosResponse } from "axios";
 
 type CreatedItem = Omit<IItem, 'id'>
 
-export default class ItemService {
+export class ItemService {
     static async getItems(): Promise<AxiosResponse<IItem[]>> {
         return api.get<IItem[]>(`/v1/items`)
     }

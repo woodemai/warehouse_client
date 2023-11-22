@@ -2,7 +2,7 @@ import api from "@/shared/api/http";
 import { ICategory } from "@/entities/category/models/ICategory";
 import { AxiosResponse } from "axios";
 
-export default class CategoryService {
+export class CategoryService {
     static async getCategorires(): Promise<AxiosResponse<ICategory[]>> {
         return api.get<ICategory[]>(`/v1/categories`);
     }

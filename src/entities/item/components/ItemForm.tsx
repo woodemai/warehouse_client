@@ -27,7 +27,6 @@ import {
 } from "@/shared/components/ui/popover"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon, Check, ChevronsUpDown } from "lucide-react"
-
 import { cn } from "@/shared/lib/shadcn/utils"
 import { ScrollArea } from "@/shared/components/ui/scroll-area"
 import { FC, useState } from "react"
@@ -39,12 +38,12 @@ import {
     CommandItem,
 } from "@/shared/components/ui/command"
 import formSchema from "./ItemFormSchema";
-import { ICategory } from "@/entities/category/models/ICategory"
-import { ISupplier } from "@/entities/supplier/models/ISupplier"
-import ItemService from "@/entities/item/api/ItemService"
 import { IItem } from "@/entities/item/models/IItem"
 import { FormState } from "../../../shared/consts/formState"
 import { Textarea } from "../../../shared/components/ui/textarea"
+import { ItemService } from "../api/ItemService"
+import { ICategory } from "@/entities/category"
+import { ISupplier } from "@/entities/supplier"
 
 
 interface ItemFormProps {

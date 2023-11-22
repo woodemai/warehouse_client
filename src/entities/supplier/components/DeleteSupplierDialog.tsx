@@ -10,8 +10,8 @@ import {
 } from "@/shared/components/ui/alert-dialog"
 import { Button } from "../../../shared/components/ui/button";
 import { FC, useState } from "react";
-import SupplierService from "@/entities/supplier/api/SupplierService";
 import { ISupplier } from "@/entities/supplier/models/ISupplier";
+import { SupplierService } from "../api/SupplierService";
 interface DeleteItemDialogProps {
     supplier: ISupplier
 }
