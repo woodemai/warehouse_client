@@ -10,14 +10,18 @@ import { useEffect, useState } from "react";
 const SupplierTab = () => {
     const { role } = useStore().store.user;
     const [suppliers, setSuppliers] = useState<ISupplier[]>([]);
-
+    const [updated, setUpdated] = useState(true)
     useEffect(() => {
-        SupplierService.getSuppliers().then(res => setSuppliers(res.data));
-    }, []);
+        if (updated) {
+            SupplierService.getSuppliers()
+                .then(res => setSuppliers(res.data))
+                .finally(() => setUpdated(false));
+        }
+    }, [updated]);
     return (
         <TabsContent value="suppliers">
             <div className='md:max-w-lg lg:max-w-xl mx-auto flex flex-col gap-4 p-4'>
-                {Boolean(role === UserRole.EMPLOYEE) && <SupplierForm formState={FormState.CREATE} />}
+                {Boolean(role === UserRole.EMPLOYEE) && <SupplierForm setUpdated={setUpdated} formState={FormState.CREATE} />}
                 <List items={suppliers} renderItem={(supplier) => <Supplier key={supplier.id} supplier={supplier} />} />
             </div>
         </TabsContent>

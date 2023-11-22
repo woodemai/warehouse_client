@@ -1,8 +1,5 @@
-import { useEffect, useState } from 'react';
 import { Separator } from "@/shared/components/ui/separator"
 import { IItem } from '@/entities/item';
-import { ISupplier, SupplierService } from '@/entities/supplier';
-import { CategoryService, ICategory } from '@/entities/category';
 import ItemControlButtons from './ItemControlButtons';
 import {
     Dialog,

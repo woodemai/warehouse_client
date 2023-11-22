@@ -37,7 +37,7 @@ import {
     CommandInput,
     CommandItem,
 } from "@/shared/components/ui/command"
-import formSchema from "../ItemFormSchema";
+import formSchema from "./ItemFormSchema";
 import { IItem } from "@/entities/item/models/IItem"
 import { FormState } from "../../../../shared/consts/formState"
 import { Textarea } from "../../../../shared/components/ui/textarea"
@@ -74,43 +74,20 @@ export const ItemForm: FC<ItemFormProps> = ({
             expirationDate: new Date(),
             weight: item?.weight ?? 0,
             price: item?.price ?? 0,
-            supplierId: item?.supplierId,
-            categoryId: item?.categoryId,
+            supplier: item?.supplier ?? {} as ISupplier,
+            category: item?.category ?? {} as ICategory,
         },
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         if (formState === FormState.UPDATE && item) {
-            const {
-                name,
-                description,
-                productionDate,
-                expirationDate,
-                storageCondition,
-                weight,
-                price,
-                categoryId,
-                supplierId
-            } = values
-            const updatedItem: IItem = {
-                id: item.id,
-                name,
-                description,
-                productionDate,
-                expirationDate,
-                storageCondition,
-                weight,
-                price,
-                categoryId,
-                supplierId
-            }
-            ItemService.updateItem(updatedItem, item.id)
+            ItemService.updateItem(values, item.id)
                 .then(() => {
                     form.reset()
                     setIsOpen(false)
                 })
 
         } else {
-            ItemService.createItem({ ...values })
+            ItemService.createItem(values)
                 .then(() => {
                     form.reset()
                     setIsOpen(false)
@@ -164,7 +141,7 @@ export const ItemForm: FC<ItemFormProps> = ({
                             />
                             <FormField
                                 control={form.control}
-                                name="supplierId"
+                                name="supplier"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
                                         <FormLabel>Поставщик</FormLabel>
@@ -181,7 +158,7 @@ export const ItemForm: FC<ItemFormProps> = ({
                                                     >
                                                         {field.value
                                                             ? suppliers.find(
-                                                                (supplier) => supplier.id === field.value
+                                                                (supplier) => supplier === field.value
                                                             )?.name
                                                             : "Выберите поставщика"}
                                                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -198,13 +175,13 @@ export const ItemForm: FC<ItemFormProps> = ({
                                                                 value={supplier.name}
                                                                 key={supplier.id}
                                                                 onSelect={() => {
-                                                                    form.setValue("supplierId", supplier.id)
+                                                                    form.setValue("supplier", supplier)
                                                                 }}
                                                             >
                                                                 <Check
                                                                     className={cn(
                                                                         "mr-2 h-4 w-4",
-                                                                        supplier.id === field.value
+                                                                        supplier === field.value
                                                                             ? "opacity-100"
                                                                             : "opacity-0"
                                                                     )}
@@ -225,7 +202,7 @@ export const ItemForm: FC<ItemFormProps> = ({
                             />
                             <FormField
                                 control={form.control}
-                                name="categoryId"
+                                name="category"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
                                         <FormLabel>Категория</FormLabel>
@@ -242,7 +219,7 @@ export const ItemForm: FC<ItemFormProps> = ({
                                                     >
                                                         {field.value
                                                             ? categories.find(
-                                                                (category) => category.id === field.value
+                                                                (category) => category === field.value
                                                             )?.name
                                                             : "Выберите категорию"}
                                                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -259,13 +236,13 @@ export const ItemForm: FC<ItemFormProps> = ({
                                                                 value={category.name}
                                                                 key={category.id}
                                                                 onSelect={() => {
-                                                                    form.setValue("categoryId", category.id)
+                                                                    form.setValue("category", category)
                                                                 }}
                                                             >
                                                                 <Check
                                                                     className={cn(
                                                                         "mr-2 h-4 w-4",
-                                                                        category.id === field.value
+                                                                        category === field.value
                                                                             ? "opacity-100"
                                                                             : "opacity-0"
                                                                     )}

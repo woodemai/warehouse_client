@@ -33,10 +33,12 @@ import { SupplierService } from "../api/SupplierService";
 interface SupplierFormProps {
     formState: FormState,
     supplier?: ISupplier
+    setUpdated?: (updated: boolean) => void
 }
 export const SupplierForm: FC<SupplierFormProps> = memo(({
     formState,
-    supplier
+    supplier,
+    setUpdated
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
@@ -49,12 +51,13 @@ export const SupplierForm: FC<SupplierFormProps> = memo(({
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         if (formState === FormState.UPDATE && supplier) {
             SupplierService.updateSupplier(supplier)
-        } else {
+        } else if(setUpdated){
             SupplierService.createSupplier(values.name, values.inn)
                 .then(() => {
                     form.reset()
                     setIsOpen(false)
                 })
+                .finally(() => setUpdated(true))
         }
     }
     return (

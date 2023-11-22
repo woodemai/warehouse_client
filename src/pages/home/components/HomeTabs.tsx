@@ -1,18 +1,24 @@
 import { Tabs } from "@/shared/components/ui/tabs";
-import ItemsTab from "./tabs/ItemsTab";
-import CategoriesTab from "./tabs/CategoriesTab";
-import SupplierTab from "./tabs/SupplierTab";
 import HomeTabsList from "./tabs/HomeTabsList";
-// const SupplierTab = lazy(() => import("./tabs/SupplierTab"));
-// const CategoriesTab = lazy(() => import("./tabs/CategoriesTab"));
+import { Suspense, lazy } from "react";
+import { Loader } from "@/shared/components/ui/loader";
+const ItemsTab = lazy(() => import("./tabs/ItemsTab"));
+const SupplierTab = lazy(() => import("./tabs/SupplierTab"));
+const CategoriesTab = lazy(() => import("./tabs/CategoriesTab"));
 
 const HomeTabs = () => {
     return (
         <Tabs defaultValue="items">
             <HomeTabsList />
-            <ItemsTab />
-            <CategoriesTab />
-            <SupplierTab />
+            <Suspense fallback={<Loader />}>
+                <ItemsTab />
+            </Suspense>
+            <Suspense fallback={<Loader />}>
+                <SupplierTab />
+            </Suspense>
+            <Suspense fallback={<Loader />}>
+                <CategoriesTab />
+            </Suspense>
         </Tabs>
     );
 };
