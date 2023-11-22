@@ -34,7 +34,7 @@ interface SupplierFormProps {
     formState: FormState,
     supplier?: ISupplier
 }
-const SupplierForm: FC<SupplierFormProps> = ({
+export const SupplierForm: FC<SupplierFormProps> = ({
     formState,
     supplier
 }) => {
@@ -115,5 +115,3 @@ const SupplierForm: FC<SupplierFormProps> = ({
         </Dialog>
     );
 }
-
-export default SupplierForm;

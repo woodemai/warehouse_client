@@ -7,7 +7,7 @@ import { useUser } from "@/shared/hooks/useUser";
 import { useStore } from "@/shared/hooks/useStore";
 import { getRole } from "@/entities/user";
 
-const UserInfo = () => {
+export const UserInfo = observer(() => {
     const { store } = useStore()
     const user = useUser();
     const [role, setRole] = useState("Неизвестная роль");
@@ -48,6 +48,4 @@ const UserInfo = () => {
             </AlertDialog>
         </div>
     );
-}
-
-export default observer(UserInfo);
+})

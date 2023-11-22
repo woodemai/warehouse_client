@@ -8,15 +8,15 @@ import {
     DialogTrigger,
 } from "@/shared/components/ui/dialog"
 import DeleteSupplierDialog from "./DeleteSupplierDialog";
-import SupplierForm from "./SupplierForm";
 import { ISupplier } from "@/entities/supplier/models/ISupplier";
 import { FormState } from "@/shared/consts/formState";
+import { SupplierForm } from "..";
 
 export interface SupplierProps {
     supplier: ISupplier
 }
 
-const Supplier: FC<SupplierProps> = ({
+export const Supplier: FC<SupplierProps> = ({
     supplier
 }) => {
     return (
@@ -31,11 +31,9 @@ const Supplier: FC<SupplierProps> = ({
                 </DialogHeader>
                 <div className='flex flex-row justify-between'>
                     <DeleteSupplierDialog supplier={supplier} />
-                    <SupplierForm formState={FormState.UPDATE} supplier={supplier}/>
+                    <SupplierForm formState={FormState.UPDATE} supplier={supplier} />
                 </div>
             </DialogContent>
         </Dialog>
     );
 }
-
-export default Supplier;

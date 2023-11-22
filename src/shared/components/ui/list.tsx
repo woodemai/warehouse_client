@@ -18,4 +18,4 @@ const List = <T extends object>({
     );
 }
 
-export default List;
+export {List};

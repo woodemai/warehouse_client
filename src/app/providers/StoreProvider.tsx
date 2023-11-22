@@ -1,6 +1,6 @@
 import { useAuth } from "@/shared/hooks/useAuth";
 import Store from "@/shared/store/store";
-import { ReactNode, createContext, useEffect } from "react"
+import { ReactNode, createContext } from "react"
 
 const store = new Store();
 

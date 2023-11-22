@@ -1,17 +1,10 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs"
-import CategoryForm from "../../../entities/category/components/CategoryForm";
-import { FC, useState } from "react";
-import ItemForm from "../../../entities/item/components/ItemForm";
-import SupplierForm from "../../../entities/supplier/components/SupplierForm";
-import ItemsFilter from "../../../entities/item/components/ItemsFilter";
-import { IItem } from "@/entities/item/models/IItem";
-import { ICategory } from "@/entities/category/models/ICategory";
-import { ISupplier } from "@/entities/supplier/models/ISupplier";
 import { FormState } from "../../../shared/consts/formState";
-import List from "../../../shared/components/ui/list";
-import Item from "../../../entities/item/components/Item";
-import Category from "../../../entities/category/components/Category";
-import Supplier from "../../../entities/supplier/components/Supplier";
+import { FC, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs"
+import { ISupplier, Supplier, SupplierForm } from "@/entities/supplier";
+import { Category, CategoryForm, ICategory } from "@/entities/category";
+import { IItem, Item, ItemForm, ItemsFilter } from "@/entities/item";
+import { List } from "@/shared/components/ui/list";
 
 interface TabsProps {
     items: IItem[],

@@ -1,12 +1,12 @@
 import { FC, useState, useEffect } from "react";
 import { Input } from "../../../shared/components/ui/input";
-import { IItem } from "@/entities/item/models/IItem";
+import { IItem } from "..";
 interface ItemsFilterProps {
     items: IItem[]
     setItems: (items: IItem[]) => void
 }
 
-const ItemsFilter: FC<ItemsFilterProps> = ({
+export const ItemsFilter: FC<ItemsFilterProps> = ({
     items,
     setItems
 }) => {
@@ -18,5 +18,3 @@ const ItemsFilter: FC<ItemsFilterProps> = ({
     }, [items, setItems, value]);
     return <Input name="search" placeholder="Поиск..." onChange={(e) => setValue(e.target.value)} />
 }
-
-export default ItemsFilter;

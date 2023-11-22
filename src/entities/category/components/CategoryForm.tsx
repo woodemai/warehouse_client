@@ -46,7 +46,7 @@ interface CategoryFormProps {
     category?: ICategory
 }
 
-const CategoryForm: FC<CategoryFormProps> = ({
+export const CategoryForm: FC<CategoryFormProps> = ({
     formState,
     category
 }) => {
@@ -140,5 +140,3 @@ const CategoryForm: FC<CategoryFormProps> = ({
 
     );
 }
-
-export default CategoryForm;

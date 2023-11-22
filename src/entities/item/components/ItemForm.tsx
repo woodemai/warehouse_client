@@ -53,7 +53,7 @@ interface ItemFormProps {
     item?: IItem,
     formState: FormState
 }
-const ItemForm: FC<ItemFormProps> = ({
+export const ItemForm: FC<ItemFormProps> = ({
     categories,
     suppliers,
     item,
@@ -415,5 +415,3 @@ const ItemForm: FC<ItemFormProps> = ({
 
     );
 }
-
-export default ItemForm;
