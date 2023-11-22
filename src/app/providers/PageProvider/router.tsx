@@ -1,4 +1,4 @@
-import Layout from "@/shared/components/layout/Layout";
+import Layout from "@/app/providers/PageProvider/Layout";
 import ProtectedRoute from "@/pages/auth/components/ProtectedRoute";
 import { AuthPage } from "@/pages/auth";
 import { HomePage } from "@/pages/home";

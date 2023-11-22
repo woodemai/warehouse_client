@@ -1,5 +1,5 @@
-import StoreProvider from './providers/StoreProvider';
-import PageProvider from './providers/PageProvider';
+import StoreProvider from './providers/StoreProvider/StoreProvider';
+import PageProvider from './providers/PageProvider/PageProvider';
 
 
 

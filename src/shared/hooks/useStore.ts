@@ -1,4 +1,4 @@
-import { Context } from "@/app/providers/StoreProvider";
+import { Context } from "@/app/providers/StoreProvider/StoreProvider";
 import { useContext } from "react";
 
 

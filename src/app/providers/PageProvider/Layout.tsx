@@ -1,6 +1,6 @@
-import Header from "../header/Header";
+import Header from "../../../shared/components/header/Header";
 import { Outlet } from 'react-router-dom'
-import { Toaster } from "../ui/toaster";
+import { Toaster } from "../../../shared/components/ui/toaster";
 const Layout = () => {
     return (
         <>
