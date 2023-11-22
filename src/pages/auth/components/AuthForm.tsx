@@ -24,19 +24,11 @@ import { Check, ChevronsUpDown } from "lucide-react"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/shared/components/ui/command"
 import { cn } from "@/shared/lib/shadcn/utils"
 import { useStore } from "@/shared/hooks/useStore"
+import { getRole } from "@/entities/user"
 enum Action {
     LOGIN,
     REGISTRATION
 }
-// function getUserRoleByText(text: string): UserRole | undefined {
-//     const enumValues = Object.values(UserRole);
-//     for (const value of enumValues) {
-//       if (value === text) {
-//         return value as UserRole;
-//       }
-//     }
-//     return undefined;
-//   }
 const AuthForm = () => {
     const [action, setAction] = useState<Action>(Action.LOGIN)
     const { store } = useStore();
@@ -45,7 +37,8 @@ const AuthForm = () => {
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
-            password: ""
+            password: "",
+            role: UserRole.BUYER
         }
     })
 
@@ -71,7 +64,7 @@ const AuthForm = () => {
         if (action === Action.LOGIN) {
             store.login(email, password)
                 .then(() => onError())
-        } else {
+        } else if (role) {
             store.registration(email, password, role)
                 .then(() => onError())
         }
@@ -140,9 +133,7 @@ const AuthForm = () => {
                                                     )}
                                                 >
                                                     {field.value
-                                                        ? Object.values(UserRole).find(
-                                                            (role) => role === field.value
-                                                        )?.toString()
+                                                        ? getRole(Object.values(UserRole).find((role) => role === field.value) || UserRole.BUYER)
                                                         : "Выберите тип аккаунта"}
                                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
@@ -169,7 +160,7 @@ const AuthForm = () => {
                                                                         : "opacity-0"
                                                                 )}
                                                             />
-                                                            {role}
+                                                            {getRole(role)}
                                                         </CommandItem>
                                                     ))}
                                                 </CommandGroup>
