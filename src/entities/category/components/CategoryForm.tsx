@@ -7,7 +7,6 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/shared/components/ui/dialog"
-import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import {
@@ -28,6 +27,7 @@ import { ICategory } from "@/entities/category/models/ICategory"
 import { cn } from "@/shared/lib/shadcn/utils"
 import { Textarea } from "../../../shared/components/ui/textarea"
 import { CategoryService } from ".."
+import { useForm } from "react-hook-form"
 
 const formSchema = z.object({
     name: z.string().min(2, {

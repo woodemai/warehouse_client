@@ -1,10 +1,11 @@
 FROM node:20-alpine AS build
-WORKDIR /app
+WORKDIR /warehouse
 COPY package*.json ./
 RUN npm install
 COPY . .
+ENV VITE_API_URL=http://0.0.0.0:8080/api/
 RUN npm run build
-FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
+FROM nginx:latest
+COPY --from=build /warehouse/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
