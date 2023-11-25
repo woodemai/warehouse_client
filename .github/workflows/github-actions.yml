@@ -5,7 +5,7 @@ on:
   push:
     branches: [development, master]
 jobs:
-  ci:
+  Tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
