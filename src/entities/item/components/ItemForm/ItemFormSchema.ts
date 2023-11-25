@@ -1,18 +1,4 @@
-import { ICategory } from "@/entities/category";
-import { ISupplier } from "@/entities/supplier";
 import * as z from "zod"
-
-const supplierSchema =  z.object<ISupplier>({
-    id: "",
-    name: "",
-    inn: 0,
-});
-
-const categorySchema = z.object<ICategory>({
-    id: "",
-    name: "",
-    description: "",
-});
 
 const formSchema = z.object({
     name: z.string().min(2, {
