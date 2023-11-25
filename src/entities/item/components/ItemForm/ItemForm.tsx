@@ -7,8 +7,6 @@ import formSchema from "./ItemFormSchema";
 import { IItem } from "@/entities/item/models/IItem"
 import { FormState } from "../../../../shared/consts/formState"
 import { ItemService } from "../../api/ItemService"
-import { ICategory } from "@/entities/category"
-import { ISupplier } from "@/entities/supplier"
 import OpenFormButton from "./OpenFormButton"
 import { Loader } from "@/shared/components/ui/loader"
 const ItemFormModal = lazy(() => import("./ItemFormModal"));
@@ -16,10 +14,12 @@ const ItemFormModal = lazy(() => import("./ItemFormModal"));
 interface ItemFormProps {
     item?: IItem,
     formState: FormState
+    setUpdated?: (updated: boolean) => void
 }
 export const ItemForm: FC<ItemFormProps> = ({
     item,
-    formState
+    formState,
+    setUpdated
 }) => {
 
     const [isOpen, setIsOpen] = useState(false);
@@ -33,8 +33,8 @@ export const ItemForm: FC<ItemFormProps> = ({
             expirationDate: new Date(),
             weight: item?.weight ?? 0,
             price: item?.price ?? 0,
-            supplier: item?.supplier ?? {} as ISupplier,
-            category: item?.category ?? {} as ICategory,
+            supplier: item?.supplier.id ?? "",
+            category: item?.category.id ?? "",
         },
     })
     const onSubmit = useCallback((values: z.infer<typeof formSchema>) => {
@@ -44,15 +44,15 @@ export const ItemForm: FC<ItemFormProps> = ({
                     form.reset()
                     setIsOpen(false)
                 })
-
-        } else {
+        } else if (setUpdated) {
             ItemService.createItem(values)
                 .then(() => {
                     form.reset()
                     setIsOpen(false)
                 })
+                .finally(() => setUpdated(true))
         }
-    }, [form, formState, item])
+    }, [form, formState, item, setUpdated])
     return (
         <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
             <OpenFormButton setIsOpen={setIsOpen} formState={formState} />

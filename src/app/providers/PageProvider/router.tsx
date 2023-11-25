@@ -1,5 +1,5 @@
 import Layout from "@/app/providers/PageProvider/Layout";
-import ProtectedRoute from "@/pages/auth/components/ProtectedRoute";
+import ProtectedRoute from "@/shared/components/protected/ProtectedRoute";
 import { AuthPage } from "@/pages/auth";
 import { HomePage } from "@/pages/home";
 import { ProfilePage } from "@/pages/profile";

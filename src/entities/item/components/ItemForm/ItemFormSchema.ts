@@ -1,15 +1,17 @@
+import { ICategory } from "@/entities/category";
+import { ISupplier } from "@/entities/supplier";
 import * as z from "zod"
 
-const supplierSchema = z.object({
-    id: z.string(),
-    name: z.string(),
-    inn: z.number(),
+const supplierSchema =  z.object<ISupplier>({
+    id: "",
+    name: "",
+    inn: 0,
 });
 
-const categorySchema = z.object({
-    id: z.string(),
-    name: z.string(),
-    description: z.string(),
+const categorySchema = z.object<ICategory>({
+    id: "",
+    name: "",
+    description: "",
 });
 
 const formSchema = z.object({
@@ -32,7 +34,7 @@ const formSchema = z.object({
     }),
     weight: z.coerce.number(),
     price: z.coerce.number(),
-    supplier: supplierSchema,
-    category: categorySchema
+    supplier: z.string(),
+    category: z.string()
 })
 export default formSchema;
