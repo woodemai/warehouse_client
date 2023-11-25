@@ -25,21 +25,13 @@ interface ItemFormModalProps {
     form: UseFormReturn<{
         name: string;
         description: string;
-        supplier: {
-            id: string;
-            name: string;
-            inn: number;
-        };
+        supplier:string
         productionDate: Date;
         expirationDate: Date;
         storageCondition: string;
         weight: number;
         price: number;
-        category: {
-            id: string,
-            name: string,
-            description: string
-        };
+        category: string
     }, undefined>
 }
 
@@ -118,7 +110,7 @@ const ItemFormModal: FC<ItemFormModalProps> = ({
                                                 >
                                                     {field.value
                                                         ? suppliers.find(
-                                                            (supplier) => supplier === field.value
+                                                            (supplier) => supplier.id === field.value
                                                         )?.name
                                                         : "Выберите поставщика"}
                                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -135,13 +127,13 @@ const ItemFormModal: FC<ItemFormModalProps> = ({
                                                             value={supplier.name}
                                                             key={supplier.id}
                                                             onSelect={() => {
-                                                                form.setValue("supplier", supplier)
+                                                                form.setValue("supplier", supplier.id)
                                                             }}
                                                         >
                                                             <Check
                                                                 className={cn(
                                                                     "mr-2 h-4 w-4",
-                                                                    supplier === field.value
+                                                                    supplier.id === field.value
                                                                         ? "opacity-100"
                                                                         : "opacity-0"
                                                                 )}
@@ -179,7 +171,7 @@ const ItemFormModal: FC<ItemFormModalProps> = ({
                                                 >
                                                     {field.value
                                                         ? categories.find(
-                                                            (category) => category === field.value
+                                                            (category) => category.id === field.value
                                                         )?.name
                                                         : "Выберите категорию"}
                                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -196,13 +188,13 @@ const ItemFormModal: FC<ItemFormModalProps> = ({
                                                             value={category.name}
                                                             key={category.id}
                                                             onSelect={() => {
-                                                                form.setValue("category", category)
+                                                                form.setValue("category", category.id)
                                                             }}
                                                         >
                                                             <Check
                                                                 className={cn(
                                                                     "mr-2 h-4 w-4",
-                                                                    category === field.value
+                                                                    category.id === field.value
                                                                         ? "opacity-100"
                                                                         : "opacity-0"
                                                                 )}

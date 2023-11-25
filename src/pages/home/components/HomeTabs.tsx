@@ -1,7 +1,7 @@
 import { Tabs } from "@/shared/components/ui/tabs";
 import HomeTabsList from "./tabs/HomeTabsList";
 import { Suspense, lazy } from "react";
-import { Loader } from "@/shared/components/ui/loader";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 const ItemsTab = lazy(() => import("./tabs/ItemsTab"));
 const SupplierTab = lazy(() => import("./tabs/SupplierTab"));
 const CategoriesTab = lazy(() => import("./tabs/CategoriesTab"));
@@ -10,13 +10,13 @@ const HomeTabs = () => {
     return (
         <Tabs defaultValue="items">
             <HomeTabsList />
-            <Suspense fallback={<Loader />}>
+            <Suspense fallback={<Skeleton className="rounded-lg md:max-w-lg lg:max-w-xl w-[250px]" />}>
                 <ItemsTab />
             </Suspense>
-            <Suspense fallback={<Loader />}>
+            <Suspense fallback={<Skeleton className="rounded-lg md:max-w-lg lg:max-w-xl w-[250px]" />}>
                 <SupplierTab />
             </Suspense>
-            <Suspense fallback={<Loader />}>
+            <Suspense fallback={<Skeleton className="rounded-lg md:max-w-lg lg:max-w-xl w-[250px]" />}>
                 <CategoriesTab />
             </Suspense>
         </Tabs>

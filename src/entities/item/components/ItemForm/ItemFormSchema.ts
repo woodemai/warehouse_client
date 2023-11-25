@@ -1,17 +1,5 @@
 import * as z from "zod"
 
-const supplierSchema = z.object({
-    id: z.string(),
-    name: z.string(),
-    inn: z.number(),
-});
-
-const categorySchema = z.object({
-    id: z.string(),
-    name: z.string(),
-    description: z.string(),
-});
-
 const formSchema = z.object({
     name: z.string().min(2, {
         message: "Name must be at least 2 characters"
@@ -32,7 +20,7 @@ const formSchema = z.object({
     }),
     weight: z.coerce.number(),
     price: z.coerce.number(),
-    supplier: supplierSchema,
-    category: categorySchema
+    supplier: z.string(),
+    category: z.string()
 })
 export default formSchema;

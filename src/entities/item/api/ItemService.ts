@@ -2,7 +2,17 @@ import api from "@/shared/api/http";
 import { IItem } from "@/entities/item/models/IItem";
 import { AxiosResponse } from "axios";
 
-type CreatedItem = Omit<IItem, "id">
+interface CreatedItem {
+    name: string,
+    description: string,
+    productionDate: Date,
+    expirationDate: Date,
+    storageCondition: string,
+    supplier: string
+    category: string
+    weight: number,
+    price: number
+}
 export class ItemService {
     static async getItems(): Promise<AxiosResponse<IItem[]>> {
         return api.get<IItem[]>(`/v1/items`)

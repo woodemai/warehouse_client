@@ -23,12 +23,12 @@ import { Check, ChevronsUpDown } from "lucide-react"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/shared/components/ui/command"
 import { cn } from "@/shared/lib/shadcn/utils"
 import { getRole } from "@/entities/user"
-import formSchema from "./authFormSchema";
+import formSchema from "./helpers/authFormSchema";
 enum Action {
     LOGIN,
     REGISTRATION
 }
-const AuthForm = () => {
+const AuthForm = observer(() => {
     const [action, setAction] = useState<Action>(Action.LOGIN)
     const { store } = useStore();
     const { toast } = useToast()
@@ -189,6 +189,6 @@ const AuthForm = () => {
             </Form>
         </div>
     );
-}
+})
 
-export default observer(AuthForm);
+export default AuthForm;
