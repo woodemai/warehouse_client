@@ -1,5 +1,4 @@
 import Layout from "@/app/providers/PageProvider/Layout";
-import ProtectedRoute from "@/pages/auth/components/ProtectedRoute";
 import { AuthPage } from "@/pages/auth";
 import { HomePage } from "@/pages/home";
 import { ProfilePage } from "@/pages/profile";
@@ -12,11 +11,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <ProtectedRoute><HomePage /></ProtectedRoute>,
+        element: <HomePage />,
       },
       {
         path: "/profile",
-        element: <ProtectedRoute><ProfilePage /></ProtectedRoute>
+        element: <ProfilePage />
       },
       {
         path: '/auth',

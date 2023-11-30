@@ -2,7 +2,7 @@ import { TabsList, TabsTrigger } from "@/shared/components/ui/tabs"
 
 const HomeTabsList = () => {
     return (
-        <TabsList className=" text-gray-800 mx-auto w-full bg-transperent">
+        <TabsList className=" text-gray-800 mx-auto w-full bg-transperent flex gap-x-2">
             <TabsTrigger value="items">Предметы</TabsTrigger>
             <TabsTrigger value="categories">Категории</TabsTrigger>
             <TabsTrigger value="suppliers">Поставщики</TabsTrigger>

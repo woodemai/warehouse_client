@@ -78,27 +78,20 @@ export default class Store {
         this.setIsLoading(true);
 
         try {
-            const response = await axios.get<AuthResponse>(`${API_URL}/v1/auth/refresh`, { withCredentials: true })
+            const response = await axios.get<AuthResponse>(`${API_URL}v1/auth/refresh`, { withCredentials: true })
             localStorage.setItem('token', response.data.accessToken);
             localStorage.setItem('user', JSON.stringify(response.data.user));
             this.setAuth(true);
             this.setUser(response.data.user);
-            console.log("try");
-            console.log(this.isLoading);
-
         } catch (error) {
             if (error instanceof AxiosError && error.response?.status === 404) {
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
                 this.setAuth(false);
-                console.log(this.isAuth);
-
                 this.setUser({} as IUser);
             }
         } finally {
             this.setIsLoading(false);
         }
-        console.log("end");
-        console.log(this.isLoading);
     }
 }

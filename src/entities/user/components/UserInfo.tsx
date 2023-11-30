@@ -25,13 +25,13 @@ export const UserInfo = observer(() => {
     }
     return (
         <div className="p-4 bg-white rounded-lg shadow-md flex flex-col gap-y-4 w-full sm:max-w-sm lg:max-w-lg">
-            <h1 className="text-xl font-bold tracking-tight">Данные пользователя</h1>
+            <h2 className="text-xl font-bold tracking-tight">Данные пользователя</h2>
             <div className="flex gap-x-4">
-                <h2 className="font-semibold">Почта</h2>
+                <h3>Почта</h3>
                 <span>{user.email}</span>
             </div>
             <div className="flex gap-x-4">
-                <h2 className="font-semibold">Роль</h2>
+                <h3>Роль</h3>
                 <span>{role}</span>
             </div>
             <AlertDialog open={open} onOpenChange={() => setOpen(!open)}>
