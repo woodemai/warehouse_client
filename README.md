@@ -1,4 +1,4 @@
-[![Node.js CI](https://github.com/woodemai/warehouse_client/actions/workflows/github-actions.yml/badge.svg)](https://github.com/woodemai/warehouse_client/actions/workflows/github-actions.yml)
+[![Build](https://github.com/woodemai/warehouse_client/actions/workflows/github-actions.yml/badge.svg)](https://github.com/woodemai/warehouse_client/actions/workflows/github-actions.yml)
 # Warehouse
 It's a react based web app.
 
