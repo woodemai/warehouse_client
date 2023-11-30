@@ -1,4 +1,4 @@
-import { UserRole } from "../../consts/UserRole";
+import { UserRole } from "../../../consts/UserRole";
 
 export function getRole(role: UserRole) {
     switch (role) {
