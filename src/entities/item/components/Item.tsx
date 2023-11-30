@@ -9,6 +9,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/shared/components/ui/dialog"
+import Card from "@/entities/card/Card";
 export const Item = (
     {
         item,
@@ -18,29 +19,16 @@ export const Item = (
     return (
         <Dialog>
             <DialogTrigger>
-                <div className='bg-background hover:scale-105 cursor-pointer transition-all durantion-100 md:max-w-lg lg:max-w-xl flex flex-row justify-between p-4 border-gray-300 text-gray-700 border rounded-lg shadow-md'>
-                    <div className='leading-6'>
-                        <div className='mb-4'>
-                            <div className='flex flex-row gap-4 items-end'>
-                                <div className='font-semibold text-xl tracking-tight'>
-                                    <h2>{item.name}</h2>
-                                </div>
-                                <div className='font-bold text-xl tracking-tight text-green-600'>
-                                    {item.price} ₽
-                                </div>
-                            </div>
-                            <div className='font-light text-left'>
-                                <p>{item.supplier.name}</p>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 className='text-left'>Описание</h3>
-                            <p className='text-left tracking-wide font-light text-sm'>{item.description}</p>
-                        </div>
+                <Card>
+                    <div className="flex gap-x-4 items-center">
+                        <h2>{item.name}</h2>
+                        <h2 className="text-green-500 text-xl">{item.price} ₽</h2>
                     </div>
-                </div>
+                    <p className="mb-4">{item.supplier.name}</p>
+                    <p><span className="font-semibold">Описание: </span>{item.description}</p>
+                </Card>
             </DialogTrigger>
-            <DialogContent className='flex flex-col gap-y-4'>
+            <DialogContent className='flex flex-col gap-y-4 bg-card'>
                 <DialogHeader>
                     <DialogTitle>{item.name}</DialogTitle>
                     <DialogDescription>{item.category.name}</DialogDescription>

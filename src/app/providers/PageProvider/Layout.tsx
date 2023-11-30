@@ -1,14 +1,30 @@
-import Header from "../../../shared/components/header/Header";
-import { Outlet } from 'react-router-dom'
+import { useLocation, useOutlet } from 'react-router-dom'
+import { SwitchTransition, CSSTransition } from 'react-transition-group'
 import { Toaster } from "../../../shared/components/ui/toaster";
+import Header from './header/Header';
 const Layout = () => {
+    const location = useLocation()
+    const currentOutlet = useOutlet()
     return (
         <>
             <Header />
-            <div className="pt-20 w-full min-h-screen h-full bg-gray-100">
-                <Toaster />
-                <Outlet />
-            </div>
+            <Toaster />
+            <SwitchTransition>
+                <CSSTransition
+                    key={location.pathname}
+                    timeout={300}
+                    classNames={'page'}
+                    unmountOnExit
+                >
+                    {() => (
+                        <div className="pt-20 w-full min-h-screen h-full">
+                            {currentOutlet}
+                        </div>
+                    )}
+
+                </CSSTransition>
+            </SwitchTransition>
+
         </>
     );
 }

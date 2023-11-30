@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
-import { Button } from "../ui/button";
 import { memo } from "react";
 import { cn } from "@/shared/lib/shadcn/utils";
+import { Button } from "@/shared/components/ui/button";
 
 const NavItem = memo(({ path, title }: { path: string, title: string }) => {
     return (
