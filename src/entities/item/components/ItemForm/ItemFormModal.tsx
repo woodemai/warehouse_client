@@ -49,7 +49,7 @@ const ItemFormModal: FC<ItemFormModalProps> = ({
         SupplierService.getSuppliers().then(res => setSuppliers(res.data));
     }, []);
     return (
-        <DialogContent className="bg-white">
+        <DialogContent data-testid="item-form-modal" className="bg-white">
             <ScrollArea className="h-[34rem]">
                 <DialogHeader>
                     <DialogTitle>Создать новый предмет</DialogTitle>

@@ -12,7 +12,7 @@ const OpenFormButton: FC<OpenFormButtonProps> = ({
     setIsOpen
 }) => {
     return (
-        <Button onClick={() => setIsOpen(true)}
+        <Button data-testid="open-form-button" onClick={() => setIsOpen(true)}
             className={cn(formState === FormState.CREATE && "w-full")}>
             {formState === FormState.UPDATE ? "Изменить" : "Создать"}
         </Button>

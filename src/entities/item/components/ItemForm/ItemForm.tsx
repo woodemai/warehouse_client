@@ -55,7 +55,7 @@ export const ItemForm: FC<ItemFormProps> = ({
     }, [form, formState, item, setUpdated])
     return (
         <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
-            <OpenFormButton setIsOpen={setIsOpen} formState={formState} />
+            <OpenFormButton  setIsOpen={setIsOpen} formState={formState} />
             <Suspense fallback={<Loader />}>
                 <ItemFormModal setIsOpen={setIsOpen} form={form} onSubmit={onSubmit} formState={formState} />
             </Suspense>
