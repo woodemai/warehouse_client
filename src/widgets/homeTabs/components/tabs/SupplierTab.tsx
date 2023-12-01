@@ -14,8 +14,8 @@ const SupplierTab = () => {
     const [updated, setUpdated] = useState(true)
     const [loading, setLoading] = useState(true)
     useEffect(() => {
-        setLoading(true)
         if (updated) {
+            setLoading(true)
             SupplierService.getSuppliers()
                 .then(res => setSuppliers(res.data))
                 .finally(() => {
