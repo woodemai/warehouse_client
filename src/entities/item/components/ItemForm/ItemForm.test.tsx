@@ -1,21 +1,12 @@
-import { describe, test, expect,beforeEach } from 'vitest'
+import { describe, test, expect, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { ItemForm } from './ItemForm'
 import { FormState } from '@/shared/consts/formState'
+import "@testing-library/jest-dom";
 
 
-describe("Item form test", () => {
-    beforeEach( async () => {
-        await render(<ItemForm formState={FormState.CREATE} />);
-    });
-
-    test("button should be defined", () => {
-        expect(screen.getByTestId(/open-form-button/i)).toBeDefined();
-    });
-    test("when clicked, modal should appear", () => {
-        const openButton = screen.getByTestId(/open-form-button/i);
-        expect(openButton).toBeDefined();
-        fireEvent.click(openButton);
-        expect(screen.findByTestId(/item-form-modal/i)).toBeDefined();
-    });
-})
+test("button should be in the document", () => {
+    const { container } = render(<ItemForm formState={FormState.CREATE} />);
+    expect(container).toMatchSnapshot();
+    expect(screen.getByTestId(/open-form-button/i)).toBeInTheDocument();
+});

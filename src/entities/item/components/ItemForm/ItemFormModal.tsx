@@ -60,6 +60,7 @@ const ItemFormModal: FC<ItemFormModalProps> = ({
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mx-4">
                         <FormField
+                            data-testid='field-name'
                             control={form.control}
                             name="name"
                             render={({ field }) => (
@@ -76,6 +77,7 @@ const ItemFormModal: FC<ItemFormModalProps> = ({
                             )}
                         />
                         <FormField
+                            data-testid='field-description'
                             control={form.control}
                             name="description"
                             render={({ field }) => (
@@ -92,6 +94,7 @@ const ItemFormModal: FC<ItemFormModalProps> = ({
                             )}
                         />
                         <FormField
+                            data-testid='field-supplier'
                             control={form.control}
                             name="supplier"
                             render={({ field }) => (
@@ -153,6 +156,7 @@ const ItemFormModal: FC<ItemFormModalProps> = ({
                             )}
                         />
                         <FormField
+                            data-testid='field-category'
                             control={form.control}
                             name="category"
                             render={({ field }) => (
@@ -214,6 +218,7 @@ const ItemFormModal: FC<ItemFormModalProps> = ({
                             )}
                         />
                         <FormField
+                            data-testid='field-productionDate'
                             control={form.control}
                             name="productionDate"
                             render={({ field }) => (

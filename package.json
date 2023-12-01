@@ -8,8 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "vitest",
-    "unit-test": "vitest"
+    "test:unit": "vitest"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
@@ -42,6 +41,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^14.1.2",
     "@types/node": "^20.8.7",
     "@types/react": "^18.2.15",
